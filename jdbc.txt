@@ -1,0 +1,714 @@
+package com.examly;
+import java.sql.*;
+import java.util.*;
+
+
+public class VirtualScienceFairProjectTracker {
+
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url, username, password);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+
+    }
+
+
+    public static void insertProject(Connection con,Scanner sc){
+        String sql = "INSERT INTO science_project VALUES(?,?,?,?,?)";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1 , Integer.parseInt(sc.nextLine()));
+            ps.setString(2 , sc.nextLine());
+            ps.setString(3 , sc.nextLine());
+            ps.setString(4 , sc.nextLine());
+            ps.setInt(5 , Integer.parseInt(sc.nextLine()));
+
+            ps.executeUpdate();
+            System.out.println("Insert Success");
+            System.out.println("Science project added successfully! ");
+            
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayAllProjects(Connection con){
+        try{
+            String sql = "SELECT * FROM science_project ORDER By project_title DESC";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ProjectID: " + rs.getInt(1)
+                +", Title: "+rs.getString(2)
+                +", Student: "+rs.getString(3)
+                +", Date: "+rs.getString(4)
+                +", Duration: "+rs.getInt(5)+" days");                            
+            }
+          System.out.println();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void processMenu(Connection con, Scanner sc){
+        int option = Integer.parseInt(sc.nextLine());
+        if(option == 1){
+            insertProject(con, sc);
+            displayAllProjects(con);
+        }
+        if(option == 2){
+            displayAllProjects(con);
+        }
+        else{
+            System.out.println("Invalid Choice.");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+        if(con!=null){
+            processMenu(con, sc);
+        }
+        else{
+            System.out.println("Failed to connect to the database.");
+        }
+      
+    }
+}
+
+
+
+
+--------------------------------------------------------------------------------
+SESSION 3 PROGRAM 1
+
+package com.examly;
+import java.util.*;
+import java.sql.*;
+
+public class OnlinePhotographyWorkshopManagement {
+
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url,username,password);
+            
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+
+    public static void displayAllWorkshops(Connection con){
+        try{
+            String sql = "SELECT * FROM photography_workshop ORDER BY location desc";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("WorkshopID: "+rs.getInt(1)
+                +", Location: "+rs.getString(2)
+                +", Date: "+rs.getString(3)
+                +", Photographer: "+rs.getString(4)
+                +", Duration: "+rs.getInt(5)+" mins");
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void insertWorkshop(Connection con,Scanner sc){
+        String sql = "insert into photography_workshop values(?,?,?,?,?)";
+       try {
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1,Integer.parseInt(sc.nextLine()));
+        ps.setString(2,sc.nextLine());
+        ps.setString(3,sc.nextLine());
+        ps.setString(4,sc.nextLine());
+        ps.setInt(5,Integer.parseInt(sc.nextLine()));
+        ps.executeUpdate();
+        System.out.println("Insert Success");
+        System.out.println("Photography workshop added successfully!");
+       } catch (Exception e) {
+        e.printStackTrace();
+       }
+       
+
+
+
+    }
+
+    public static void deleteWorkshop (Connection con,Scanner sc){
+        try{
+            String location = sc.nextLine();
+            String photographer = sc.nextLine();
+            String sql = "DELETE FROM photography_workshop WHERE location = ? and photographer = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1,location);
+            ps.setString(2, photographer);
+            int n = ps.executeUpdate();
+            if(n!= 0){
+                System.out.println("Photography workshop deleted successfully!");
+            }
+
+            else{
+                System.out.println("No record deleted");
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+
+        }
+    }
+
+
+    public static void processMenu(Connection con,Scanner sc){
+        int option = Integer.parseInt(sc.nextLine());
+        if(option == 1){
+            insertWorkshop(con,sc);
+            displayAllWorkshops(con);
+        }
+        else if(option == 2){
+            deleteWorkshop(con, sc);
+            displayAllWorkshops(con);
+        }
+        else if(option == 3){
+            displayAllWorkshops(con);
+        }
+        else
+            System.out.println("Invalid Choice");
+        
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+        if(con != null){
+            processMenu(con, sc);
+        } 
+        else{
+            System.out.println("Failed to connect to the database.");
+        }      
+    }
+}
+
+
+
+
+-------------------------------------------------------------------
+
+
+
+package com.examly;
+import java.util.*;
+import java.util.Date;
+import java.sql.*;
+
+public class DigitalArtGalleryManagement {
+
+    public static Connection getConnection() {
+        Connection con = null;
+        try {
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url, username, password);
+        } catch (Exception e) {
+            System.out.println("Database connection failed.");
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    public static void insertExhibit(Connection con, Scanner sc) {
+        String sql = "INSERT INTO art_gallery_exhibit VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(sc.nextLine()));
+            ps.setString(2, sc.nextLine());
+            ps.setString(3, sc.nextLine());
+            ps.setDate(4,java.sql.Date.valueOf(sc.nextLine().trim()));
+            ps.setInt(5, Integer.parseInt(sc.nextLine()));
+
+    ps.executeUpdate();
+    System.out.println("Insert Success");
+            System.out.println("Art exhibit added successfully!");
+        } catch (Exception e) {
+            System.out.println("Error inserting exhibit.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateExhibitDuration(Connection con, Scanner sc) {
+        String sql = "UPDATE art_gallery_exhibit SET duration_days = duration_days + 15 WHERE exhibit_id = ? AND artwork_title = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            int id = Integer.parseInt(sc.nextLine());
+            String title = sc.nextLine();
+            ps.setInt(1, id);
+            ps.setString(2, title);
+
+    int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Update Success");
+                System.out.println("Exhibit duration updated successfully!");
+            } else {
+                System.out.println("No matching exhibit found.");
+            }
+            displayAllExhibits(con);
+        } catch (SQLException e) {
+            System.out.println("Error updating exhibit.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayAllExhibits(Connection con) {
+        String sql = "SELECT * FROM art_gallery_exhibit ORDER BY artwork_title DESC";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+    
+        while (rs.next()) {
+                System.out.println("ExhibitID: " + rs.getInt("exhibit_id")
+                    + ", Artwork: " + rs.getString("artwork_title")
+                    + ", Artist: " + rs.getString("artist_name")
+                    + ", Date: " + rs.getDate("exhibit_date")
+                    + ", Duration: " + rs.getInt("duration_days") + " days");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error displaying exhibits.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void processMenu(Connection con, Scanner sc) {
+        int choice = Integer.parseInt(sc.nextLine());
+
+    switch (choice) {
+            case 1:
+                insertExhibit(con, sc);
+                break;
+            case 2:
+                updateExhibitDuration(con, sc);
+                break;
+            case 3:
+                displayAllExhibits(con);
+                break;
+            default:
+                System.out.println("Invalid Choice");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+
+    if (con != null) {
+            processMenu(con, sc);
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing connection.");
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+------------------------------------------------------------------------------------------------
+SESSION 3 PROGRAM 2
+
+
+package com.examly;
+import java.sql.*;
+import java.util.*;
+
+public class OnlineArtWorkshopManagement {
+
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url, username, password);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    public static void displayAllWorkshops(Connection con){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT * FROM art_workshop ORDER BY artwork_name DESC";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("WorkshopID: " + rs.getInt(1)
+                    + ", Artwork: " + rs.getString(2)
+                    + ", Date: " + rs.getString(3)
+                    + ", Artist: " + rs.getString(4)
+                    + ", Duration: " + rs.getInt(5) + " mins");
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally{
+            try { if(rs != null) rs.close(); } catch(Exception ignore){}
+            try { if(ps != null) ps.close(); } catch(Exception ignore){}
+        }
+    }
+
+    public static void insertWorkshop(Connection con, Scanner sc){
+        PreparedStatement ps = null;
+        try{
+            String sql = "INSERT INTO art_workshop VALUES(?,?,?,?,?)";
+            ps = con.prepareStatement(sql);
+
+    int id = Integer.parseInt(sc.nextLine().trim());
+            String artwork = sc.nextLine().trim();
+            String wdate = sc.nextLine().trim(); // stored as VARCHAR(20) per spec
+            String artist = sc.nextLine().trim();
+            int duration = Integer.parseInt(sc.nextLine().trim());
+
+    // Minimum duration policy
+            if(duration < 60) duration = 60;
+
+    ps.setInt(1, id);
+            ps.setString(2, artwork);
+            ps.setString(3, wdate);
+            ps.setString(4, artist);
+            ps.setInt(5, duration);
+
+    ps.executeUpdate();
+            System.out.println("Insert Success");
+            System.out.println("Art workshop added successfully!");
+
+    // After insert, display in reverse alphabetical order of artwork_name
+            displayAllWorkshops(con);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try { if(ps != null) ps.close(); } catch(Exception ignore){}
+        }
+    }
+
+    public static void updateWorkshopDuration(Connection con, Scanner sc){
+        PreparedStatement ps = null;
+        try{
+            String artwork = sc.nextLine().trim();
+            String artist = sc.nextLine().trim();
+
+    String sql = "UPDATE art_workshop " +
+                         "SET duration_mins = duration_mins + 45 " +
+                         "WHERE artwork_name = ? OR artist = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, artwork);
+            ps.setString(2, artist);
+
+    int rows = ps.executeUpdate();
+            if(rows > 0){
+                System.out.println("Workshop duration updated successfully!");
+            }else{
+                System.out.println("No matching workshop found.");
+            }
+
+    // Then display all in reverse alphabetical order of artwork_name
+            displayAllWorkshops(con);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally{
+            try { if(ps != null) ps.close(); } catch(Exception ignore){}
+        }
+    }
+
+    public static void processMenu(Connection con, Scanner sc){
+        int choice = Integer.parseInt(sc.nextLine().trim());
+        if(choice == 1){
+            insertWorkshop(con, sc);
+        }
+        else if(choice == 2){
+            updateWorkshopDuration(con, sc);
+        }
+        else if(choice == 3){
+            displayAllWorkshops(con);
+        }
+        else{
+            System.out.println("Invalid Choice");
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+        if(con != null){
+            processMenu(con, sc);
+            try{
+                con.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("Failed to connect to the database.");
+        }
+    }
+}
+
+------------------------------------------------------------------------------------------------------------
+SESSION 2 PROGRAM 3
+
+package com.examly;
+import java.sql.*;
+import java.util.*;
+
+public class OnlineMusicConcertManagement {
+
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url, username, password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    public static void displayAllConcerts(Connection con){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT * FROM music_concert ORDER BY artist_name DESC";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ConcertID: " + rs.getInt(1)
+                    + ", Artist: " + rs.getString(2)
+                    + ", Date: " + rs.getString(3)
+                    + ", Venue: " + rs.getString(4)
+                    + ", Duration: " + rs.getInt(5) + " mins");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try{ if(rs!=null) rs.close(); }catch(Exception ignore){}
+            try{ if(ps!=null) ps.close(); }catch(Exception ignore){}
+        }
+    }
+
+    public static void insertConcert(Connection con, Scanner sc){
+        PreparedStatement ps = null;
+        try{
+            String sql = "INSERT INTO music_concert VALUES(?,?,?,?,?)";
+            ps = con.prepareStatement(sql);
+
+    int id = Integer.parseInt(sc.nextLine().trim());
+            String artist = sc.nextLine().trim();
+            String cdate = sc.nextLine().trim(); // VARCHAR(20) per spec
+            String venue = sc.nextLine().trim();
+            int duration = Integer.parseInt(sc.nextLine().trim());
+
+    if(duration < 60) duration = 60; // minimum duration policy
+
+    ps.setInt(1, id);
+            ps.setString(2, artist);
+            ps.setString(3, cdate);
+            ps.setString(4, venue);
+            ps.setInt(5, duration);
+
+    ps.executeUpdate();
+            System.out.println("Insert Success");
+            System.out.println("Music concert added successfully!");
+
+    displayAllConcerts(con); // then display sorted by artist_name DESC
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{ if(ps!=null) ps.close(); }catch(Exception ignore){}
+        }
+    }
+
+    public static void processMenu(Connection con, Scanner sc){
+        int choice = Integer.parseInt(sc.nextLine().trim());
+        if(choice == 1){
+            insertConcert(con, sc);
+        }else if(choice == 2){
+            displayAllConcerts(con);
+        }else{
+            System.out.println("Invalid Choice");
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+        if(con != null){
+            processMenu(con, sc);
+            try{ con.close(); }catch(SQLException e){ e.printStackTrace(); }
+        }else{
+            System.out.println("Failed to connect to the database.");
+        }
+    }
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+session 3 code 3
+
+
+
+
+package com.examly;
+import java.sql.*;
+import java.util.*;
+
+public class OnlineCookingWorkshopManagement {
+
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+            String url = "jdbc:mysql://localhost/appdb";
+            String username = "root";
+            String password = "examly";
+            con = DriverManager.getConnection(url, username, password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+    public static void displayAllWorkshops(Connection con){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            String sql = "SELECT * FROM cooking_workshop ORDER BY dish_name DESC";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("WorkshopID: " + rs.getInt(1)
+                    + ", Dish: " + rs.getString(2)
+                    + ", Date: " + rs.getDate(3)
+                    + ", Chef: " + rs.getString(4)
+                    + ", Duration: " + rs.getInt(5) + " mins");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try{ if(rs!=null) rs.close(); }catch(Exception ignore){}
+            try{ if(ps!=null) ps.close(); }catch(Exception ignore){}
+        }
+    }
+
+    public static void insertWorkshop(Connection con, Scanner sc){
+        PreparedStatement ps = null;
+        try{
+            String sql = "INSERT INTO cooking_workshop VALUES (?,?,?,?,?)";
+            ps = con.prepareStatement(sql);
+
+    int id = Integer.parseInt(sc.nextLine().trim());
+            String dish = sc.nextLine().trim();
+            String dateStr = sc.nextLine().trim(); // input as YYYY-MM-DD
+            String chef = sc.nextLine().trim();
+            int duration = Integer.parseInt(sc.nextLine().trim());
+
+    ps.setInt(1, id);
+            ps.setString(2, dish);
+            ps.setDate(3, java.sql.Date.valueOf(dateStr));
+            ps.setString(4, chef);
+            ps.setInt(5, duration);
+
+    ps.executeUpdate();
+            System.out.println("Insert Success");
+            System.out.println("Cooking workshop added successfully!");
+            displayAllWorkshops(con);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{ if(ps!=null) ps.close(); }catch(Exception ignore){}
+        }
+    }
+
+    public static void deleteWorkshop(Connection con, Scanner sc){
+        PreparedStatement ps = null;
+        try{
+            String dish = sc.nextLine().trim();
+            String chef = sc.nextLine().trim();
+
+    String sql = "DELETE FROM cooking_workshop WHERE dish_name = ? AND chef = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, dish);
+            ps.setString(2, chef);
+
+    int n = ps.executeUpdate();
+            if(n > 0){
+                System.out.println("Cooking workshop deleted successfully!");
+            }else{
+                System.out.println("No record deleted");
+            }
+            displayAllWorkshops(con);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try{ if(ps!=null) ps.close(); }catch(Exception ignore){}
+        }
+    }
+
+    public static void processMenu(Connection con, Scanner sc){
+        int choice = Integer.parseInt(sc.nextLine().trim());
+        if(choice == 1){
+            insertWorkshop(con, sc);
+        }else if(choice == 2){
+            deleteWorkshop(con, sc);
+        }else if(choice == 3){
+            displayAllWorkshops(con);
+        }else{
+            System.out.println("Invalid Choice");
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        Connection con = getConnection();
+        if(con != null){
+            processMenu(con, sc);
+            try{ con.close(); }catch(SQLException e){ e.printStackTrace(); }
+        }else{
+            System.out.println("Failed to connect to the database.");
+        }
+    }
+}
+
