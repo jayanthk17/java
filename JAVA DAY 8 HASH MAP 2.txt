@@ -1,0 +1,609 @@
+JAVA DAY 8 HASH MAP
+
+HashSet is internally HashMap	--fast but no order
+LinkedHashSet LinkedHashMap	--order as inserted
+TreeSet TreeMap			--sorted ascending order
+
+Map: map is a collection of key-value pairs.
+
+collection of object, key can be any object , value can be any object.
+	--key mostly will be int or String(not compulsory).
+	-- keys are unique , values can be duplicate.
+	-- Map is an interface: classes to implement --> HashMap , LinkedHashMap, TreeMap.
+
+e.g.	Banking
+	|
+	AccountNo [key]		AccountData [value]
+	
+	6767677			{"AaA","Mumbai",566}
+
+HashMap: Stores key value pairs.	
+	--do not maintain order of keys.
+	--very fast for search , insert, delete, (O(1) average time).
+	--allows null key (only 1) and multiple null values.
+	-- .containsValue() , .containsKey() --> Map have their  .containsKey()and .containsValue().
+
+Creating Map:
+	
+	HashMap<Integer,String> map = new HashMap<>();
+	HashMap<Integer,String> map2 = new HashMap<>();
+
+1.Adding element to map:
+	
+	map.put(101,"ABC");
+	map2.put(101,new Student("ABC","Mumbai"));
+
+2. Accessing Value Map
+	
+	String s = map.get(101);	--> pass a key in .get() to access value.
+
+3. Remove element from map
+	
+	map.remove(101);   -->pass a key in remove.
+
+4. Updating element of Map
+	map.put(101,"XYZ");	--> will update value of given key if exist.
+
+5. Searching element in Map
+	if(map.containsKey(101))	--> return true or false.
+
+6. i).Traversing Map
+	Traversing Keys only
+		keyset() 	returns set of keys.
+	
+		for(Integer x: map.keySet())
+		{
+			System.out.println(x);
+			System.out.println(map.get(x));
+		}
+
+	Set is unordered(no index value), so we can't use regular for loop. only traverse using for-each loop.
+
+   ii).Traversing Values only
+		for(String s:map.values()){
+			System.out.println(s)
+		}
+
+   iii).Traversing Key-Value pair (using entrySet Map interface inside Entry Interface --> Set of entrySet.)
+	
+	for(Map.EntrySetSet<Integer,String> entry : map.entrySet())
+	{	
+		System.out.println(entry.getKey());
+		System.out.println(entry.getValue());
+	}
+
+
+
+*************no program on LinkedHashMap, last 3 CODE on day 8 imp for milestone. SESSION 2 not than imp only SESSION 1 and 3 imp***************************
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------DAY  8 SESSION 1 CODE 1
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class StudentMarkManager {
+    public static void main(String[] args) {
+        HashMap<String,Integer> map = new HashMap<>();
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            int option = Integer.parseInt(sc.nextLine());
+            switch ((option)) {
+                case 1:
+                    String name = sc.nextLine();
+                    int marks = Integer.parseInt(sc.nextLine());
+                    if(name==null || name.isEmpty()){
+                        System.out.println("Invalid student name!");
+                        continue;
+                    }
+                    if(marks<0){
+                        System.out.println("Invalid mark!");
+                        continue;
+                    }
+                    map.put(name,marks);
+                    break;
+
+
+                case 2:
+                System.out.println("Student Marks:");
+                    for(String str: map.keySet())
+                        System.out.println(str+": "+map.get(str));
+                    break;
+
+
+                case 3:
+                    String updateKey = sc.nextLine();
+                    if(map.containsKey(updateKey)){
+                        int newMarks = Integer.parseInt(sc.nextLine());
+                        if(newMarks<0){
+                            System.out.println("Invalid mark!");
+                        }
+                        else{
+                            map.put(updateKey, newMarks);
+                            System.out.println("Mark updated!");
+                        }
+                    }
+                    else{
+                        System.out.println("Student not found.");
+                    }
+                    break;
+                case 4:
+                    String deleteKey = sc.nextLine();
+                    if(map.containsKey(deleteKey)){
+                        map.remove(deleteKey);
+                        System.out.println("Student deleted!");
+                    }
+                    else{
+                        System.out.println("Student not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Thank you!");
+                    return;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 1 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;;;......class Book......................
+package com.examly;
+
+public class Book {
+    private String title;
+    private String author;
+    private int availableCopies;
+    public Book(String title, String author, int availableCopies) {
+        this.title = title;
+        this.author = author;
+        this.availableCopies = availableCopies;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+    public void setAvailableCopies(int availableCopies) {
+        this.availableCopies = availableCopies;
+    }
+    public void display(String bookId){
+        System.out.println("Book ID: "+bookId+" | Title: "+title+" | Author: " +author+ " | Available: "+availableCopies);
+    }
+}
+..........................................class LibraryManager...........
+package com.examly;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class LibraryManager {              
+
+    public  static void manageLibrary(){
+        HashMap<String,Book> map = new HashMap<>();
+        Scanner sc= new Scanner(System.in);
+        while(true){
+            int option = Integer.parseInt(sc.nextLine());
+            switch(option){
+                case 1:
+                    String id = sc.nextLine();
+                    if(id==null || id.isEmpty()){
+                        System.out.println("Invalid Book ID");
+                        continue;
+                    }
+                    String author = sc.nextLine();
+                    String title = sc.nextLine();
+                    if(author == null || author.isEmpty() || title ==null || title.isEmpty()){
+                        System.out.println("Invalid book details!");
+                        continue;
+                    }
+                    int copies = Integer.parseInt(sc.nextLine());
+                    if(copies<0){
+                        System.out.println("Invalid number of copies!");
+                        continue;
+                    }
+                    map.put(id,new Book(author, title,copies));
+                    break;
+                case 2:
+                    for(String bid: map.keySet()){
+                        Book b = map.get(bid);
+                        b.display(bid);
+                    }
+                    break;
+                case 3:
+                    String updateId = sc.nextLine();
+                    if(map.containsKey(updateId)){
+                        
+                        int newCopies = Integer.parseInt(sc.nextLine());
+                        if(newCopies<0){
+                            System.out.println("Invalid update value!");
+                        }
+                        else{
+                            Book b = map.get(updateId);
+                            b.setAvailableCopies(newCopies);
+                        }
+                    }
+                    else
+                        System.out.println("Book not found.");
+                    break;
+                case 4:
+                    String deleteId = sc.nextLine();
+                    if(map.containsKey(deleteId)){
+                        map.remove(deleteId);
+                        System.out.println("Book removed!");
+                    }
+                    else
+                        System.out.println("Book not found.");
+                    break;
+                case 5:
+                    return;
+                default:
+                    break;
+            }
+        }
+    }
+    public static void main(String[] args) {
+        
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------DAY 8 SESSION 1 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.nio.channels.Pipe.SourceChannel;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class CharFrequencyCounter {
+    public static void countFrequency(String str) throws Exception
+    {
+        if(str ==null || str.trim().isEmpty())
+            throw new Exception("Invalid input: String is empty or null");
+        HashMap<Character,Integer> freqMap=new HashMap<>();
+        for(char c: str.trim().toLowerCase().toCharArray())
+        {
+            if(c!=' '){
+                if(freqMap.containsKey(c)){
+                    int count = freqMap.get(c);
+                    freqMap.put(c,count+1);
+                }
+                else
+                    freqMap.put(c,1);
+            }
+        }
+        System.out.println("character frequencies:");
+        for(char c:freqMap.keySet())
+            System.out.println(c + " = "+freqMap.get(c));
+
+    }
+    public static void main(String[] args) {
+       try{
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        countFrequency(input);
+       }
+       catch(Exception e){
+        System.out.println(e.getMessage());
+       }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------DAY 8 SESSION 2 CODE 1
+''''''''''''''''''''''''''''
+package com.examly;
+
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+
+public class ContactManager {
+    public static void manageContacts(int n){
+        LinkedHashMap<String,String> map = new LinkedHashMap<>();
+        Scanner sc = new Scanner(System.in);
+        int i =0;
+        while(i<n){
+            String name = sc.nextLine();
+            String phno = sc.nextLine();
+            if(name==null || name.trim().isEmpty() || phno==null || phno.trim().isEmpty()){
+                System.out.println("Name and phone cannot be empty.");
+            }
+            else{
+                map.put(name,phno);
+                i++;
+            }   
+        }
+        String searchName = sc.nextLine();
+        System.out.println("Contacts List:");
+        for(String name: map.keySet()){
+            System.out.println("Name: "+name+", Phone: "+map.get(name));
+        }
+        if(map.containsKey(searchName)){
+            System.out.println("Search Result:");
+            System.out.println(searchName+"'s Phone: "+map.get(searchName));
+        }
+        else    
+            System.out.println("Contact not found.");
+    }
+    public static void main(String[] args) {
+        
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 2 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.Scanner;
+import java.util.TreeMap;
+
+public class CountryPopulationMap {
+    public static void storeAndManageCountries(int n){
+        TreeMap<String,Long> map = new TreeMap<>();
+        Scanner sc = new Scanner(System.in);
+        for(int i =0;i<n;i++){
+            String country =sc.nextLine();
+            long newPopulation = Long.parseLong(sc.nextLine());
+            map.put(country,newPopulation);
+        }
+        String updatePrompt = sc.nextLine();
+        if(updatePrompt.equalsIgnoreCase("yes")){
+            String country = sc.nextLine();
+            if(map.containsKey(country)){
+                long newPopulation = Long.parseLong(sc.nextLine());
+                map.put(country,newPopulation);
+            }
+            else
+                System.out.println("Country not found for update.");
+        }
+        String deletePrompt = sc.nextLine();
+        if(deletePrompt.equalsIgnoreCase("yes")){
+            String country = sc.nextLine();
+            if(map.containsKey(country))
+                map.remove(country);
+            else    
+                {System.out.println("Country not found for removal.");
+            }
+        }
+        System.out.println("Country and population (Sorted by Country Name):");
+        for(String s:map.keySet()){
+            System.out.println(s+" - "+map.get(s));
+        }
+    }
+    public static void main(String[] args) {
+    
+    }
+}  
+------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 2 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;,,,,,,,,,,,,,,,,class Employee,,,,,,,,,,,
+package com.examly;
+
+public class Employee {
+    private int employeeId;
+    private String name;
+    private String department;
+
+    public void display(){
+        System.out.println("ID: "+employeeId+" | Name: "+name+" | Dept: "+department);
+    }
+
+    public Employee(int employeeId, String name, String department) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.department = department;
+    }
+}
+...............................................................class EmployeeDirectory.................
+package com.examly;
+
+import java.util.Scanner;
+import java.util.TreeMap;
+
+public class EmployeeDirectory {
+    public static void addAndDisplayEmployees(int n){
+        TreeMap<Integer,Employee>map = new TreeMap<>();
+        Scanner sc = new Scanner(System.in);
+        for(int i=0;i<n;i++){
+            int id = Integer.parseInt(sc.nextLine());
+            String name = sc.nextLine();
+            String dept = sc.nextLine();
+            map.put(id,new Employee(id,name,dept));
+        }
+        System.out.println("Employee Details (Sorted by ID):");
+        for(Employee e:map.values())
+            e.display();
+    }
+    public static void main(String[] args) {
+        addAndDisplayEmployees(3);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 3 CODE 1
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class RatingTracker {
+    public static void insertRatings(ArrayList<Integer> ratings,int n){
+        Scanner sc = new Scanner(System.in);
+        for(int i=0;i<n;i++){
+            int rating = sc.nextInt();
+            if(rating<0 || rating>5)
+                throw new IllegalArgumentException("Invalid rating: must be between 1 and 5.");
+            ratings.add(rating);
+        }
+    }
+    public static void displayRatings(ArrayList<Integer> ratings){
+        if(ratings.isEmpty())
+                System.out.println("No valid ratings were entered. Please try again with atleast one valid rating.");
+        else
+            System.out.println("All Ratings: "+ratings);
+        
+    }
+    public static void analyzeRatings(ArrayList<Integer> ratings){
+        int count =0;
+        int count1 =0;
+        for(int r : ratings){
+            if(r==5)
+                count++;  
+            if(r==1)
+                count1++; 
+        }
+        double percentage = (double)count/ratings.size()*100;
+        System.out.println("5-Star Ratings Count: "+count+" ("+String.format("%.2f", percentage)+"%)");
+        System.out.println("Lowest Rating: "+Collections.min(ratings));
+        System.out.println("1 star: "+count1);
+        System.out.println("5 star: "+count);
+    }
+    public static void findLowestRating(ArrayList<Integer> ratings){
+        if(!ratings.isEmpty())
+            System.out.println("Lowest Rating: "+Collections.min(ratings));
+    }
+    public static void printRatingFrequency(ArrayList<Integer> ratings){
+        int c1=0 , c2=0 , c3=0 , c4=0 , c5=0;
+        for(int r : ratings){
+            if(r==1) c1++;
+            if(r==2) c2++;
+            if(r==3) c3++;
+            if(r==4) c4++;
+            if(r==5) c5++;
+        }
+        System.out.println("1 star: "+c1);
+        System.out.println("2 star: "+c2);
+        System.out.println("3 star: "+c3);
+        System.out.println("4 star: "+c4);
+        System.out.println("5 star: "+c5);
+    }
+    
+    public static void main(String[] args) {
+
+//Write Your Code Here       
+
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 3 CODE 2
+............................
+package com.examly;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+
+public class ProductPriceManager {
+    public static void insertProducts(HashMap<String,Double> products,int n)throws InvalidPriceException{
+        Scanner sc = new Scanner(System.in);
+        for(int i=0;i<n;i++){
+            String name = sc.nextLine();
+            Double price = Double.parseDouble(sc.nextLine());
+            if(products.containsKey(name))
+                System.out.println("Duplicate product skipped: "+name);
+            else if(price<=0)
+                throw new InvalidPriceException("Invalid price entered for product: "+name);
+            else
+                products.put(name,price);
+        }
+    }
+    public static void displayProducts(HashMap<String,Double> products){
+        if(products.isEmpty())
+            System.out.println("No products available.");
+        else    
+        {
+            System.out.println("Products and Prices:");
+            for(String name: products.keySet()){
+                System.out.println(name+" : ₹"+String.format("%.2f",products.get(name)));
+            }
+        }
+    }
+    public static void removeBelowThreshold(HashMap<String,Double> products,double threshold){
+        products.keySet().removeIf(name -> products.get(name) < threshold);
+
+    }
+    public static void countInRange(HashMap<String,Double> products,double min, double max){
+        int count =0;
+        for(String name : products.keySet())
+            {
+                double price = products.get(name);
+                if(price >= min && price <= max)
+                    count++;
+            }
+        System.out.println("Products within price range ₹"+min+" - ₹"+max+": "+count);
+    }
+
+    public static void main(String[] args) {
+          
+ }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 8 SESSION 3 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class CourseManager {
+    public static void insertCourses(HashSet<String> courses,int n){
+        Scanner sc = new Scanner(System.in);
+        for(int i=0;i<n;i++){
+            String courseName = sc.nextLine();
+            if(courseName==null || courseName.isEmpty()){
+                throw new IllegalArgumentException("Course name cannot be empty.");
+            }
+            else if(courses.contains(courseName)){
+                System.out.println("Duplicate course skipped: "+courseName);
+            }
+            else{
+                courses.add(courseName);
+            }
+        }      
+    }
+    public static void displayCourses(HashSet<String> courses){
+        if(courses.isEmpty()){
+            System.out.println("No courses found.");
+        }
+        else{
+            for(String course : courses){
+                System.out.println("Courses Enrolled: "+course);
+            }
+        }
+    }
+    public static void searchCourse(HashSet<String> courses,String name){
+        if(courses.contains(name))
+            System.out.println("Course "+name+" is enrolled");
+        else   
+            System.out.println("Course "+name+" is not enrolled");
+    }
+    public static void removeCourse(HashSet<String> courses,String name){
+        if(!courses.contains(name)){
+            System.out.println("Course "+name+" not found.");
+        }
+        else{
+            courses.remove(name);
+            System.out.println("Course "+name+" removed successfully.");
+        }
+    }
+    public static void countCourses(HashSet<String> courses){
+        System.out.println("Total Unique Courses: "+courses.size());
+    }
+    public static void main(String[] args) {
+      
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------

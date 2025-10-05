@@ -1,0 +1,129 @@
+Student Table
+|
+roll	name	address	   marks
+|
+Primary Key  --   Unique + Not Null	Constraint
+
+
+
+Insert Query
+|
+Insert Into Student Values(1,'ABC','PUNE',45.46)
+Insert Into Student (Roll ,Name) Values (2,'PQR')
+
+
+
+Select Query
+|
+Select * From Student
+Select Roll, Name From Student
+Select * From Student Where roll=1
+Select * From Student Where Roll >10 and Marks<70
+
+
+Select * From Student Order By Name
+Select * From Student Order By Name desc
+
+Select * From Student Order By Name, Marks desc
+
+
+Update Query
+|
+Update Student Set Name='JKL', Marks=35 Where Roll=1
+
+Update Student Set Marks = Marks + 10 Where Marks<30;
+
+
+
+Delete Query
+|
+Delete from Student where Roll=1
+Delete from Student where name like 'r%'
+Delete from Student where name like 'ra_t'
+
+
+
+JDBC API
+|
+JDBC is a Java package containing various interfaces and classes used to connect to database and execute sql queries
+
+
+java.sql package
+
+MySQL
+|
+Student Table
+|
+Roll	Name	Marks
+
+1.Install Driver
+	Driver is a low level library which executes sql queries
+
+
+
+Java Program  						MySQL Database
+     |-------------------Driver-----------------------------|
+
+	with current version of java JVM manages driver installation in background
+
+2.Connect to database
+
+	String url="...";
+	String username="";
+	String password="";
+
+	Connection con=DriverManager.getConnection(url,username,password);
+
+3.Define Statement -- represents SQL Query
+
+	Types of Statement interfaces
+	|
+	Statement		Normal SQL		insert into Student Values(1,'A','Pune')
+	PreparedStatement       Parameterized SQL       insert into Student Values(?,?,?)
+	CallableStatement	Stored Procedure
+
+
+	String sql="Insert Into Student Values(?,?,?)";
+	PreparedStatement ps=con.prepareStatement(sql);
+
+
+4. Execute Query
+	
+	int roll=Integer.parseInt(sc.nextLine());
+	String anme=sc.nextLine();
+	double marks=Double.parseDouble(sc.nextLine());
+
+	ps.setInt(1,roll);
+	ps.setString(2,name);
+	ps.setDouble(3,marks);
+
+	int n=ps.executeUpdate();
+
+
+---------------------------------------------------------------------------------------------------------
+
+Select Query
+
+3. String sql="Select * From Student ORder By Nane desc"
+   PreparedStatement ps=con.prepareStatement(sql);
+
+4.Execute Query
+	
+	ResultSet rs=ps.executeQuery();
+
+	while(rs.next())   ----> moves in row wise
+	{
+		System.out.println("Roll: "+rs.getInt(1)+"Name: "+rs.getString(2)+"Marks: "+rs.getDouble(3));
+	}
+
+
+
+
+
+	
+
+
+
+
+  
+

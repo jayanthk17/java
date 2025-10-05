@@ -1,0 +1,897 @@
+JAVA DAY 7 COLLECTIONS
+........................
+
+COLLECTIONS: All collections are of GENERIC TYPE.
+
+Java Collections: (A library).
+	is a library which contains classes/interfaces to define groups of elements based on different algorithms.
+--java.util package.
+
+--LIST , SET , MAP type of collection. 3 main types of collection.
+
+-- Queue not in syllabus. only List and Set we will study.
+
+--List is a collection of similar data elements(objects)
+	e.g.
+		List of names
+		List of students.
+		List of emps.
+--Set is a collection of "Unique and unordered data" elements(objects).
+
+List										Set
+|										|
+Duplicate allowed								No duplicates
+elements are ordered [having index].						No order [no index]
+
+--Both are collection of objects.
+
+-- List ,Set --> Interface.
+--ArrayList and Linked List --> Class,  HashSet,LinkedListSet , TreeSet --> Class.
+
+--LIST types:
+	1.ArrayList. --> Dynamic array(no fixed size).
+			int []a = new int[10] --> static (Size is fixed).
+
+			ArrayList t = new ArrayList(20) --> resizable array of size 20.
+			ArrayList t = new ArrayList()   --> resizable array of size 10 by default.
+			 if we create arraylist using constructor ArrayList() without passing size by default size will be 10 of empty ArrayList.
+
+			ArrayList<String> List = new ArrayList<>; --> Resizable-array.
+	
+			--capacity is the initial size, as elements are added it's capacity increases.
+
+	Primitive Operations:
+	1. Adding element to collection
+	2. Deleting element from collection.
+	3. Updating element in collection.
+	4.Display [traverse] collection.
+	5.Searching.
+	6.Sorting.
+	
+	Collection framework only works with Objects [not on primitive types] (object will be allocated memory in heap )
+	 int x = 100; (not object, primitive type)     ,       Integer x=100; (Object)
+							      Integer x = new Integer(100);
+	Generics : Is an option to use classes/methods for different data types
+		e.g.
+			class Stack						
+			{
+				Integer arr[];
+				void push(Integer x)..
+				Integer pop()
+				}
+		e.g.
+			class Stack<T>				(of type T , no particular data type.)
+			{					
+				T arr[];
+				void push(T x)..
+				T pop()
+				}
+			Stack<Integer> s = new Stack<>();		//create obj of different type of data types.
+			Stack<Double> d = new Stack<>();
+			Stack<Student> sd = new Stack<>();
+
+	Create collection of Integer,Double or custom like Student type.
+		ArrayList<Integer> L1 = new ArrayList<>();
+		ArrayList<String> L2 = new ArrayList<>();
+
+
+	1. Adding elements to ArrayList.
+	.................
+
+ 	L1.add(100);	-->is like an append operation.
+	L2.add("abcd");
+
+	add() method 
+	
+	L1.add(2,200); -->using index it's insert operation
+
+
+	2. Remove / delete element from ArrayList.
+	..........
+	
+	remove(int index) --> removes element from list. if element not available throws Exception.
+	
+	remove(object) --> removes given object from list . If element not available returns false.
+
+	e.g.
+		ArrayList<String> l2 = new ArrayList<>();
+		// adding elements....
+
+		l2.add("ABC");
+		l2.add("XYZ");
+		l2.add("PQR");
+
+		// removing elements...
+
+		l2.remove("XYZ");		--> better to write like this.
+		l2.remove(l2.indexOf("XYZ"));
+		..............................................................................
+	e.g.
+		ArrayList<Integer> l1 = new ArrayList<>();
+		l1.add(10);
+		l1.add(20);
+		
+		l1.remove(l1.indexOf(10));		--> use indexOf() for Integer type of ArrayList as they don't know that it's element or index .
+		.....................................................................................
+	3. Updating element of an ArrayList
+
+		l1 --> 10 , 20 , 30 , 40
+		set(index,newValue);			get(index) return value at given index--> l1.get(0);
+
+		l1.set(2,25).
+		...........................................................................................
+	4. Searching operation.
+		l1 --> 10 , 20 , 30 , 40
+
+		indexOf(objext) --> returns index of given object or else -1.
+		
+		contains(object) --> returns true if object is available or else returns false.
+		
+		if(l1.contains(20)){
+			returns true/false;
+		}
+	................................................
+	
+	5. Sorting operation.
+		Collections.sort(l1);
+	...............................................
+	6. Traversing Collection.
+		l1 --> 10 , 20 , 30 , 40
+		
+		1. Using regular for loop
+			for(int i=0;i<l1.size();i++){
+				System.out.println(l1.get(i));
+				}
+		2. Using for-each loop
+			for(int x: l1)
+				System.out.println(x);
+	...................................................
+
+
+	2.LinkedList.
+		Doubly Linked list --> prev,next address.
+		traversing is slow compared to arraylist, but here adding is faster than arraylist
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 1 CODE 1
+;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class MarksProcessor {
+   public static void processMarks(ArrayList<Integer> marks){
+    // 1.Remove all elements having marks 40
+    marks.removeIf(m -> m < 40);
+    //2. sort ArrayList
+    Collections.sort(marks);
+    // 3. print List 
+    System.out.println("Filtered and Sorted Marks:");
+    for(int mark : marks){
+        System.out.println(mark);
+    }
+    // 4. print no passing students [size of list]
+    System.out.println("Total Passing Students: "+marks.size());
+    //5. Find min and max print it.
+    if(!(marks.isEmpty())){
+        System.out.println("Highest Mark: "+Collections.max(marks));
+        System.out.println("Lowest Mark: "+Collections.min(marks));
+    }
+}
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<Integer> marks = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            marks.add(sc.nextInt());
+        }
+        processMarks(marks);
+           }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Object class --> superclass of every java class
+|
+toString()
+|
+used to generate string representation of an object
+-------------------
+
+	class Student{
+		int roll;
+		String name;
+		@Override
+		public String toString(){
+			return "Hi my name is "+name+" and My Roll no is "+roll;
+		}
+		public void display(){
+		s.o.p ("Hi my name is ABC and My Roll no is 1");
+		}
+	}
+	Student s = new Student(1,"ABC");
+	System.out.println(s);  --> s.toString()
+			--> "Hi my name is ABC and My Roll no is 1"
+	...............................................................................
+
+	class StudentManager
+	{
+		ArrayList<Student> sd = new ArrayList<>();
+		void addStudents(Scanner s)
+		{
+			int n = s.nextInt();
+			//sd  = new ArrayList<>(n);
+------------------------------------------------------------------------------------------------------------------------------------------------------------DAY 7 SESSION 1 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;
+........................................class Student.............................
+package com.examly;
+
+public class Student {
+    private int rollNumber;
+    private String name;
+    private double marks;
+    @Override
+    public String toString() {
+        return "Roll: "+rollNumber+", Name: "+name+", Marks: "+String.format("%.1f",marks);
+    }
+    public Student(int rollNumber, String name, double marks) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+        this.marks = marks;
+    }
+    public int getRollNumber() {
+        return rollNumber;
+    }
+    public void setRollNumber(int rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public double getMarks() {
+        return marks;
+    }
+    public void setMarks(double marks) {
+        this.marks = marks;
+    }
+    
+}
+......................................................class StudentManager..........................
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class StudentManager {
+    ArrayList<Student> students = new ArrayList<>();
+    public void addStudents(Scanner sc){
+        int n = Integer.parseInt(sc.nextLine());
+        for(int i=0;i<n;i++){
+            String line = sc.nextLine();
+            String [] str = line.split(" ");
+
+            int roll = Integer.parseInt(str[0]);
+            String name = str[1];
+            double marks = Double.parseDouble(str[2]);
+            Student s = new Student(roll,name,marks);
+            students.add(s);
+        }
+    }
+    public void updateStudentMarks(Scanner sc){
+        System.out.println("Enter roll number to update marks: ");
+        int rollNumber = Integer.parseInt(sc.nextLine());
+        
+        boolean isFound = false;
+        for(Student s: students){
+            if(s.getRollNumber() == rollNumber){
+                System.out.println("Enter new marks: ");
+                double newMarks = Double.parseDouble(sc.nextLine());
+                s.setMarks(newMarks);
+                isFound = true;
+                break;
+            }
+        }
+        if(!(isFound)){
+            System.out.println("Student not found for update");
+        }
+    }
+    public void removeStudent(Scanner sc){
+        int rollNumber = Integer.parseInt(sc.nextLine());
+        boolean isFound = false;
+        for(Student s: students){
+            if(s.getRollNumber() == rollNumber){    
+                isFound = true;
+                students.remove(s);
+                break;
+            }
+        }
+        if(!isFound){
+            System.out.println("Student not found for removal");
+        }
+    }
+    public void displayStudents(){
+        System.out.println("Student List: ");
+        for(Student s: students){
+            System.out.println(s);
+        }
+
+    }
+
+}
+.....................................................................class StudentApp......................
+package com.examly;
+
+
+import java.util.*;
+
+public class StudentApp {
+
+    public static void main(String[] args) {
+         Scanner sc = new Scanner(System.in);
+         StudentManager studentManager = new StudentManager();
+         studentManager.addStudents(sc);
+         studentManager.updateStudentMarks(sc);
+         studentManager.removeStudent(sc);
+         studentManager.displayStudents();
+}
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+3 types of SETs:
+	HashSet					(fast for search/add/remove )
+		no duplicates
+		one null element is allowed
+		no order of elements
+	e.g. HashSet<Integer> h = new HashSet<>();
+	     h.add(34);
+	     h.add(23);
+	     h.add(45);
+		
+		display  23	45	34   --> unordered elements.
+	
+	LinkedHashSet
+		no duplicates
+		one null element is allowed
+		insertion order
+			
+			display 34	23	45
+		
+		
+	TreeSet
+
+		no duplicates
+		no null elements
+		sorted in ascending order
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 2 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;
+
+package com.examly;
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class PinCollector { 
+    public static void collectPins(int n , Scanner sc){
+        HashSet<Integer> pins = new HashSet<>();
+        for(int i = 0 ; i<n;i++){
+            try{
+                int pin = sc.nextInt();
+                if(pin >=1000 && pin<=9999){ //check pin is 4 digit
+                    if(pins.contains(pin)){
+                        System.out.println("Duplicate PIN ignored: "+pin);
+                    }
+                    else
+                        pins.add(pin);
+                }
+                else
+                    throw new InvalidPinException("Invalid PIN entered: "+pin+" (PIN must be 4 digits)");
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }   
+        System.out.println("Unique PINs Collected:");
+        for(Integer i : pins){
+            System.out.println(i);}
+    }
+    public static void main(String[] args) {
+       Scanner sc = new Scanner(System.in);
+       int n = sc.nextInt();
+       collectPins(n,sc);
+}
+}
+............................................InvalidPinException............
+package com.examly;
+
+public class InvalidPinException extends Exception {
+    public InvalidPinException(String msg) {
+        super(msg);
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Object class --> super class of every java class
+|
+toString
+equals
+hashcode
+
+Student s1 = new Student(1,"AAA");
+Student s2 = new Student(1,"BBB");
+
+if(s1.equals(s2))
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 2 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;...................class Book...................................
+package com.examly;
+
+public class Book {
+    private int bookId;
+    private String title;
+    private String author;
+    public Book(int bookId, String title, String author) {
+        this.bookId = bookId;
+        this.title = title;
+        this.author = author;
+    }
+    public int getBookId() {
+        return bookId;
+    }
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    public void display(){
+        System.out.println("ID: "+bookId+" | Title: "+title+" | Author: "+author);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + bookId;
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Book other = (Book) obj;
+        if (bookId != other.bookId)
+            return false;
+        return true;
+    }
+}
+.............................................................class BookCatalog............
+package com.examly;
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class BookCatalog {
+       public static void addBook(HashSet<Book> books, Book book)
+       {
+              //1. check id ID is valid
+              if(book.getBookId()<0){
+                     System.out.println("Invalid Book ID");
+                     return;
+              }
+              //2. Check if book already exists
+              if(books.contains(book)){
+                     System.out.println("Duplicate book found with ID: "+book.getBookId());
+              }
+              else{
+                     books.add(book);
+                     System.out.println("Book added successfully.");
+              }
+       }
+       public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            int n = Integer.parseInt(sc.nextLine());
+            HashSet<Book> books = new HashSet<>();
+            for(int i = 0; i < n ; i++){
+              int id = Integer.parseInt(sc.nextLine());
+              String author = sc.nextLine();
+              String title = sc.nextLine();
+              Book b = new Book(id,title,author);
+              addBook(books,b);
+            }
+            System.out.println("Unique Books in catalog");
+            for(Book b: books){
+              b.display();
+            }
+}
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Comparable and Comparator
+---------------------------
+
+ArrayList<Student> list = new ArrayList<>();
+Collections.sort(list);
+	--whether to sort based on roll no or name?
+	--using either of 2 interfaces comparable and comparator.
+COMPARABLE & COMPARATOR : are interfaces used to define order for custom objects
+	Comparable : defines natural order   --> based on primary key kinda thing.
+	Comparator : Custom Order	--> sort based on name , marks.
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 3 CODE 1
+;;;;;;;;;;;;;;;;;;;;;;,,,,,,,,,,,.........class Student.........
+package com.examly;
+
+public class Student implements Comparable<Student>{
+    private String name;
+    private double marks;
+    @Override
+    public int compareTo(Student t){ //this method is used to compare two objects of Student
+        return Double.compare(this.marks, t.marks);
+    }
+    // compare Marks of this and t and return Double
+   
+    public void display() {
+        System.out.println("Name: "+name+ ", Marks: "+String.format("%.1f",marks));
+    }
+    public Student(String name, double marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public double getMarks() {
+        return marks;
+    }
+    public void setMarks(double marks) {
+        this.marks = marks;
+    }
+}
+........................................................class StudentSorter...........................
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class StudentSorter {
+    public static void sortStudents(ArrayList<Student> students){
+      Collections.sort(students);
+      System.out.println("Sorted List by Marks:");
+      for(Student s:students)
+         s.display();
+    }
+    public static void main(String[] args) {
+           Scanner sc = new Scanner(System.in);
+           int n = sc.nextInt();
+           ArrayList<Student> students = new ArrayList<>();
+           for(int i=0 ; i<n ; i++){
+            String name= sc.nextLine();
+            double marks = Double.parseDouble(sc.nextLine());
+           }
+           sortStudents(students);
+           for(Student s: students){
+            System.out.println(s);
+           }
+ }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 3 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;;;;;...............class Product.......................
+package com.examly;
+
+import java.util.Comparator;
+
+class DiscountComparator implements Comparator<Product>
+{
+    //quick fix unimplemented methods
+    @Override
+    public int compare(Product p1, Product p2) {
+        return Double.compare(p2.getDiscountPercentage(), p1.getDiscountPercentage());
+    }
+    
+}
+public class Product {
+    private String name;
+    private double price;
+    private double discount;
+
+    public void display(){
+        System.out.println("Name: "+name+" | Price: "+String.format("%.1f",price)+" | Discount: "+String.format("%.1f",discount)
+        +" | Effective Price: "+String.format("%.1f",getEffectivePrice())
+        +" | Discount %: "+String.format("%.1f",getDiscountPercentage()));
+        
+    }
+    public double getEffectivePrice(){
+        return price - discount;
+    }
+    public double getDiscountPercentage(){
+        return discount/price*100;
+    }
+    public Product(String name, double price, double discount) {
+        this.name = name;
+        this.price = price;
+        this.discount = discount;
+    }
+    
+
+}
+.............................................................class ProductDiscountSorter.......................
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class ProductDiscountSorter {
+
+        public static void sortByDiscount(ArrayList<Product> products){
+            Collections.sort(products,new DiscountComparator());
+            for(Product p: products)
+                p.display();
+        }
+    
+
+    public static void main(String[] args) {
+        
+    
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ "RAhul" "Rohit" "Rahul"	list1
+ |
+ list RAhul	Rohit 		HashSet , list2
+				h1   -- Rahul  Rohit
+				list2 --RAhul  Rohit
+
+logic: 
+list1.clear();
+list1.addAll(list2);
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DAY 7 SESSION 1 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+.........................................................class ParticipantManager..........................
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+
+public class ParticipantManager {
+    public static void processNames(ArrayList<String> list1, char filterChar){
+        //  list1--> RAhul , Rohit , rahul
+        HashSet<String> uNames = new HashSet<>();
+        ArrayList<String> tempList = new ArrayList<>();
+        for(String s: list1){
+            if(!uNames.contains(s.toLowerCase())){
+                uNames.add(s.toLowerCase());
+                tempList.add(s);
+            }
+        }
+        // copy contents of templist to original list list1 , this is a removal operation .
+        // remove all the elements of list1 , copy the elements from templist.
+        list1.clear();                                                                  //rahul , rohit
+        list1.addAll(tempList);                                                         // RAhul , Rohit
+        System.out.println("Unique Participant Count: "+list1.size());
+        System.out.println("Names starting with '"+filterChar+"':");
+        for(String s: list1){
+            if(Character.toLowerCase(s.charAt(0))==Character.toLowerCase(filterChar))
+                System.out.println(s);
+        }
+        Collections.sort(list1);
+        System.out.println("Final Participant List:");
+        for(String s: list1)
+            System.out.println(s);
+    }
+    public static void updateName(ArrayList<String> list , String originalName ,String newName){
+        // if(list.contains(originalName)){
+        //     list.set(list.indexOf(originalName), newName);
+        //     System.out.println("Update name: "+originalName+" -> "+newName);
+        // }
+        for(int i=0;i<list.size();i++){
+            if(originalName.equalsIgnoreCase(list.get(i))){
+                list.set(i, newName);
+                System.out.println("Updated name: "+originalName+" -> "+newName);
+            }
+        }
+    }
+    public static void main(String[] args) {
+
+
+
+           }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+perform operation like hashmap but we have to work with 2 list.
+good program for exam pov.
+.........................................................................
+DAY 7 SESSION 2 CODE 1
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class TaskManagerApp {
+    public static void addTasks(LinkedList<String> pendingList, Scanner sc, int n){
+        for(int i=0;i<n;i++){
+            String task = sc.nextLine();
+            pendingList.add(task);
+        }
+    }
+    public static void markTaskAsCompleted(LinkedList<String> pendingList,LinkedList<String> completedList,String taskName){
+        if(pendingList.contains(taskName)){
+            pendingList.remove(taskName);
+            completedList.add(taskName);
+        }
+        else    
+            System.out.println("Task not found in pending list.");
+
+    }
+    public static void removeCompletedTask(LinkedList<String> completedList,String taskName){
+        if(completedList.contains(taskName)){
+            completedList.remove(taskName);
+        }
+        else    
+            System.out.println("Task not found in completed list.");
+
+    }
+    public static void displayTasks(LinkedList<String> pendingList,LinkedList<String> completedList){
+        if(pendingList.isEmpty() && completedList.isEmpty())
+                System.out.println("No tasks available.");
+        if(pendingList.isEmpty())
+                System.out.println("None");
+        for(int i=0;i<pendingList.size();i++){
+                System.out.println("Pending Tasks:");
+                System.out.println((i+1)+". "+pendingList.get(i));
+            }
+        if(completedList.isEmpty())
+            System.out.println("None");
+        for(int i=0;i<pendingList.size();i++){
+            System.out.println("Completed Tasks:");
+            System.out.println((i+1)+". "+completedList.get(i));
+        }
+        }
+    public static void main(String[] args) {
+        
+    
+}
+
+   }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 7 SESSION 3 CODE 3
+;;;;;;;;;;;;;;;;;;;;;
+......................................class Employee.............
+package com.examly;
+
+public class Employee {
+    private int id;
+    private String name;
+    private int score;
+    public Employee(int id, String name, int score) {
+        this.id = id;
+        this.name = name;
+        this.score = score;
+    }
+    public int getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public int getScore() {
+        return score;
+    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Employee other = (Employee) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
+    public void display(){
+        System.out.println("ID: "+id+", Name: "+name+", Score: "+score);
+    }
+    
+}
+
+.....................................class PerformanceComparator...............
+package com.examly;
+
+import java.util.Comparator;
+
+public class PerformanceComparator implements Comparator<Employee>{
+
+    @Override
+    public int compare(Employee arg0, Employee arg1) {
+        return arg1.getScore() - arg0.getScore();
+    }
+    
+}
+
+...........................class EmployeePerformanceManager................
+package com.examly;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+
+public class EmployeePerformanceManager {
+    HashSet<Employee> set = new HashSet<>();
+    public void addEmployees(Scanner sc){
+        int n = Integer.parseInt(sc.nextLine());
+        for(int i=0;i<n;i++){
+            int Id = Integer.parseInt(sc.nextLine());
+            String name = sc.nextLine();
+            int score = Integer.parseInt(sc.nextLine());
+            Employee emp = new Employee(Id, name, score);
+            if(set.contains(emp)){
+                System.out.println("Duplicate Employee ID found: "+Id+" - Skipping duplicate entry");
+            }
+            else{
+                set.add(emp);
+            }
+        }
+    }
+    public List<Employee> getSortedEmployees(){
+        ArrayList<Employee> list = new ArrayList<>(set);
+        Collections.sort(list,new PerformanceComparator());
+        System.out.println("Sorted Employees by Performance Score:");
+        for(Employee e:list){
+            e.display();
+        }
+        return list;
+    }
+    public void displaySortedEmployees(){
+        getSortedEmployees();
+        
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------
