@@ -1,0 +1,399 @@
+
+import java.util.*;
+
+class InvalidTaskException extends Exception(){
+    InvalidTaskException(String msg){
+        super(msg);
+    }
+}
+
+class Hashset{
+    public static void addTask (HashSet<String>) tasks,int n) throws InvalidTaskException{
+          
+        Scanner sc = new Scanner(System.in);
+        for(int i=0;i<n;i++){
+        String t = sc.nextLine().trim();
+          if(t.isEmpty()){
+            throw new InvalidTaskException("Empty task not allowed");
+          }
+            
+        if(tasks.contains(t)){
+             System.out.println("Duplicate task not allowed");
+        }
+          tasks.add(t);
+        
+        
+        }
+        
+    }
+    
+    public static void displayTasks(HashSet<String> tasks){
+        for(String task : tasks ){
+            System.out.println(task);
+        }
+        
+        
+        public static countKeywords(HashSet<String> tasks,String keyword){
+            
+            // count and print case int
+            //no match found
+            int count = 0;
+            for(String t : tasks){
+                if(t.toLowerCase().contains(keyword)){
+                    count++;
+                    
+                }
+                
+                
+            }
+            if(count == 0){
+                   System.out.println("No match found");
+            }
+            else{
+                System.out.println(count);
+            }
+            
+            
+        }
+        
+        public updateTask (HashSet<String> tasks,String original , String newTask){
+            if(taks.contains(original)){
+                tasks.remove(original);
+                tasks.add(newTask);
+                 System.out.println("task updated successfully");
+                
+            }
+            else{
+                  System.out.println("No task found");
+            }
+            
+            
+        }
+        
+        
+    }
+       }
+    
+}
+
+
+-----------------------------------------------------------------------------------------------
+
+
+// You are using Java
+
+
+class ArrayList{
+    
+    class InvalidMarksException extends Exception{
+        InvalidMarksException(String msg){
+            super(msg);
+        }
+    }
+    void insertMarks(Scanner sc,int n) throws InvalidMarksException{
+        ArrayList<Integer> marks = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            int mark = sc.nextInt();
+            if(mark<0){
+                throw new InvalidMarksException("low marks");
+            }
+            
+            else{
+                marks.add(mark);
+            
+            }
+            
+        }
+        
+    }
+    
+    void updateMarks(){
+        
+       for(int i=0;i<marks.size();i++){
+           int getter = marks.get(i);
+	int update = int(getter+getter*0.1);
+           marks.set(i,update);
+           
+       }
+        
+    }
+    
+    void countPassMarks(){
+        int count = 0;
+        
+        for(int i=0;i<marks.size();i++){
+           if(marks.get(i)>40){
+               System.out.println("Success");
+               count++;
+           }
+           
+           else{
+               System.out.println("Fail");
+           }
+           System.out.println("Total pass"+ count);
+        }
+        
+    }
+    
+    void displayMarks(){
+        
+        if(marks.isEmpty()){
+        System.out.println("empty");
+        }
+        
+        else{
+            for(String mark : marks){
+                System.out.println(mark);
+            }
+        }
+        
+    }
+}
+
+
+---------------------------------------------------------------------------------------------
+3 input in single line then split it trim it 
+
+
+package com.examly;
+
+import java.util.*;
+
+class InvalidMarksException extends Exception {
+    public InvalidMarksException(String msg) {
+        super(msg);
+    }
+}
+
+class Student {
+    private int roll;
+    private String name;
+    private double marks;
+
+    public Student(int roll, String name, double marks) {
+        this.roll = roll;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public int getRoll() {
+        return roll;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getMarks() {
+        return marks;
+    void setMarks(double marks) {
+        this.marks = marks;
+    }
+
+    public void display() {
+        System.out.println("Roll: " + roll + ", Name: " + name + ", Marks: " + marks);
+    }
+}
+
+public class StudentManager {
+    ArrayList<Student> students = new ArrayList<>();
+
+    public void insertMarks(Scanner sc, int n) throws InvalidMarksException {
+        for (int i = 0; i < n; i++) {
+            String line = sc.nextLine().trim();
+            String[] parts = line.split(" ");
+            if (parts.length != 3) {
+                System.out.println("Invalid input format. Expected: roll name marks");
+                continue;
+            }
+
+            int roll = Integer.parseInt(parts[0]);
+            String name = parts[1];
+            double marks = Double.parseDouble(parts[2]);
+
+            if (marks < 0) {
+                throw new InvalidMarksException("low marks");
+            }
+
+            students.add(new Student(roll, name, marks));
+        }
+    }
+
+public void updateMarks() {
+    for (Student s : students) {
+        if (s.getMarks() < 40) {
+            double updated = s.getMarks() + s.getMarks() * 0.1;
+            s.setMarks(updated);
+        }
+    }
+}
+
+    public void countPassMarks() {
+        int count = 0;
+        for (Student s : students) {
+            if (s.getMarks() > 40) {
+                System.out.println("Success");
+                count++;
+            } else {
+                System.out.println("Fail");
+            }
+        }
+        System.out.println("Total pass: " + count);
+    }
+
+    public void displayMarks() {
+        if (students.isEmpty()) {
+            System.out.println("empty");
+        } else {
+            for (Student s : students) {
+                s.display();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StudentManager manager = new StudentManager();
+
+        try {
+            System.out.print("Enter number of students: ");
+            int n = Integer.parseInt(sc.nextLine());
+            System.out.println("Enter student details (roll name marks) in single line:");
+            manager.insertMarks(sc, n);
+        } catch (InvalidMarksException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("\nOriginal Marks:");
+        manager.displayMarks();
+
+        manager.updateMarks();
+        System.out.println("\nUpdated Marks:");
+        manager.displayMarks();
+
+        System.out.println("\nPass/Fail Report:");
+        manager.countPassMarks();
+    }
+}
+
+
+
+
+
+------------------------------------------------------------------------
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+// Custom Exception
+class InvalidBorrowCountException extends Exception {
+    public InvalidBorrowCountException(String message) {
+        super(message);
+    }
+}
+
+public class LibraryManager {
+
+    // Insert books
+    public static void insertBook(HashMap<String, Integer> books, int n) throws InvalidBorrowCountException {
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter book title: ");
+            String title = sc.nextLine();
+            System.out.print("Enter borrow count: ");
+            int count = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            if (books.containsKey(title)) {
+                System.out.println("Duplicate book skipped: " + title);
+            } else if (count < 0) {
+                throw new InvalidBorrowCountException("Borrow count cannot be negative for book: " + title);
+            } else {
+                books.put(title, count);
+            }
+        }
+    }
+
+    // Display all books
+    public static void displayBooks(HashMap<String, Integer> books) {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+        } else {
+            System.out.println("All Books and Counts:");
+            for (String title : books.keySet()) {
+                System.out.println(title + " : " + books.get(title));
+            }
+        }
+    }
+
+    // Update borrow count
+    public static void updateBorrowCount(HashMap<String, Integer> books) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter book title to update: ");
+        String title = sc.nextLine();
+
+        if (books.containsKey(title)) {
+            books.put(title, books.get(title) + 1);
+            System.out.println("Updated Borrow Count of " + title + " : " + books.get(title));
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
+    // Filter books by threshold
+    public static void filterByThreshold(HashMap<String, Integer> books) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Threshold value: ");
+        int threshold = sc.nextInt();
+
+        boolean found = false;
+        for (String title : books.keySet()) {
+            if (books.get(title) > threshold) {
+                System.out.println(title + " : " + books.get(title));
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No books exceed the threshold.");
+        }
+    }
+
+    // Filter books by starting letter
+    public static void filterByStartingLetter(HashMap<String, Integer> books) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Letter to search: ");
+        char letter = sc.nextLine().toLowerCase().charAt(0);
+
+        boolean found = false;
+        for (String title : books.keySet()) {
+            if (title.toLowerCase().charAt(0) == letter) {
+                System.out.println(title + " : " + books.get(title));
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No books found starting with " + letter);
+        }
+    }
+
+    // Main method
+    public static void main(String[] args) {
+        HashMap<String, Integer> books = new HashMap<>();
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter number of books: ");
+            int n = sc.nextInt();
+            sc.nextLine(); // consume newline
+            insertBook(books, n);
+        } catch (InvalidBorrowCountException e) {
+            System.out.println(e.getMessage());
+        }
+
+        displayBooks(books);
+        updateBorrowCount(books);
+        filterByThreshold(books);
+        filterByStartingLetter(books);
+    }
+}
+
