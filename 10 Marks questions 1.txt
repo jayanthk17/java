@@ -1,0 +1,257 @@
+10 Marks
+
+
+1.Armstrong
+
+import java.util.*;
+
+public class Main
+{
+    
+    
+    public static boolean isArmstrong(int n){
+        int sum=0,t=n;
+        
+        while(n!=0){
+            
+            int d=n%10;
+            sum=sum+d*d*d;
+            n=n/10;
+        }
+        return t==sum;
+        
+    }
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int n=sc.nextInt();
+		if(isArmstrong(n)){
+		    System.out.println(n+" Is Armstrong No");
+		}
+		else{
+		    
+		    System.out.println(n+" Is not Armstrong No");
+		    
+		}
+		
+		isArmstrong(5);
+	}
+}
+
+
+---------------------------------------------------------------------------
+
+2.Strong Number
+
+import java.util.*;
+
+public class Main
+{
+    
+    public static int fact(int n){
+        
+    if(n<0){
+        return 0;
+    }    
+        
+    
+    if(n==0 || n==1){
+        return 1;
+    }
+        
+    int fact=1;
+    for(int i=1;i<=n;i++){
+        fact*=i;
+    }
+    return fact;
+    
+    }
+    
+    public static boolean isStrong(int n){
+        int sum=0,t=n;
+        
+        while(n!=0){
+            
+            int d=n%10;
+            sum=sum+fact(d);
+            n=n/10;
+        }
+        return t==sum;
+        
+    }
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int n=sc.nextInt();
+		if(isStrong(n)){
+		    System.out.println(n+" Is strong No");
+		}
+		else{
+		    
+		    System.out.println(n+" Is not strong No");
+		    
+		}
+		
+		isStrong(5);
+	}
+}
+
+-------------------------------------------------------------------------------------
+
+3.Reverse Array
+
+import java.util.*;
+
+public class Main
+{
+    
+    
+public static void reverseArray(int a[])
+{
+    int [] b=new int[a.length];
+    
+    int j=0;
+    
+    for(int i=a.length-1;i>=0;i--){
+        
+        b[j]=a[i];
+        j++;
+    }
+		
+		for(int i=0;i<a.length;i++){
+		    System.out.print(b[i]+" ");
+		    
+		}
+    
+}    
+  
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int size=sc.nextInt();
+		
+		int[] arr=new int[size];
+		for(int i=0;i<size;i++){
+		    arr[i]=sc.nextInt();
+		}
+		
+		reverseArray(arr);
+		
+	
+	}
+}
+-------------------------------------------------------------------------------------------------
+
+4.Rearrange
+
+import java.util.*;
+
+public class Main
+{
+    
+    
+public static void regenerateArray(int a[])
+{
+    int [] b=new int[a.length];
+    
+    int j=0;
+    
+    for(int i=0;i<a.length;i++){
+        
+        if(a[i]<0){
+        b[j]=a[i];
+        j++;
+    }
+    
+    
+    for(int i=0;i<a.length;i++){
+        
+        if(a[i]>=0){
+        b[j]=a[i];
+        j++;
+    }
+    
+    
+    return b;
+    
+    
+}    
+  
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int size=sc.nextInt();
+		
+		int[] arr=new int[size];
+		for(int i=0;i<size;i++){
+		    arr[i]=sc.nextInt();
+		}
+		
+		regenerateArray(arr);
+		
+	
+	}
+}
+
+-------------------------------------------------------------------------------
+5. find kth largest number
+
+
+
+
+-------------------------------------------------------------------------------
+
+6.Even Count and odd count
+
+
+--------------------------------------------------------------------------------
+7. Remove Duplicate elements
+
+
+int[] removeDuplicates(int a[]) {
+    LinkedHashSet<Integer> set = new LinkedHashSet<>();
+
+    for (int x : a)
+        set.add(x);
+
+    int b[] = new int[set.size()];
+    int i = 0;
+    for (int c : set) {
+        b[i] = c; // Corrected from 'x' to 'c'
+        i++;
+    }
+
+    return b;
+}
+---------------------------------------------------------------------------------
+8.Count frequencies
+
+import java.util.HashMap;
+
+public class FrequencyCounter {
+    public static void main(String[] args) {
+        String s = "example"; // You can change this to any string
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char c : s.toCharArray()) {
+            if (map.containsKey(c)) {
+                int count = map.get(c);
+                map.put(c, count + 1);
+            } else {
+                map.put(c, 1);
+            }
+        }
+
+        // Print the frequencies
+        for (char c : map.keySet()) {
+            System.out.println(c + ": " + map.get(c));
+        }
+    }
+}
+
+----------------------------------------------------------------------
+9.Sum of digits
+
+String s="jfhjhf"
+int sum=0;
+
+for(char c:s.toCharArray()){
+if(Character.isDigit(s)){
+
+
