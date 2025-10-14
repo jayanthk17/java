@@ -1,0 +1,1051 @@
+
+Program 1
+
+package com.examly;
+import java.sql.*;
+import java.util.*;
+public class VirtualScienceFairProjectTracker {
+
+
+    public static Connection getConnection(){
+
+        Connection con=null;
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+            con=DriverManager.getConnection(url,username,password);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+
+    }
+
+    public static void displayAllProjects(Connection con){
+
+        try{
+            String sql="Select * From science_project Order By project_title desc";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ProjectID: "+rs.getInt(1)+", Title: "+rs.getString(2)+", Student: "+rs.getString(3)+", Date: "+rs.getString(4)+", Duration: "+rs.getInt(5)+"days");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void insertProject(Connection con,Scanner sc){
+
+        String sql="Insert Into science_project Values(?,?,?,?,?)";
+
+        try{
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+            ps.executeUpdate();
+
+           
+
+
+            System.out.println("Science project added successfully!");
+
+
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void processMenu(Connection con,Scanner sc){
+
+        int option=Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertProject(con,sc);
+            displayAllProjects(con);
+        }
+        else if(option==2){
+            displayAllProjects(con);
+
+        }
+        else{
+            System.out.println("Invalid Choice. ");
+        }
+
+
+
+
+    }
+    public static void main(String[] args) {
+
+
+        processMenu(getConnection(),new Scanner(System.in));
+   
+    }
+}
+
+----------------------------------------------------------------------------------------------------
+Program 03
+
+
+package com.examly;
+import java.util.*;
+
+import java.sql.*;
+
+
+public class OnlineMusicConcertManagement {
+
+
+    public static Connection getConnection(){
+        Connection con=null;
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+
+            con=DriverManager.getConnection(url,username,password);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return con;
+
+    }
+
+    public static void displayAllConcerts(Connection con){
+
+        try{
+            String sql="Select * From music_concert Order by artist_name desc";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ConcertID: "+rs.getInt(1)+", Artist: "+rs.getString(2)+", Date: "+rs.getString(3)+", Venue: "+rs.getString(4)+", Duration: "+rs.getInt(5)+"mins");
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        
+
+    }
+
+
+    public static void insertConcert(Connection con, Scanner sc){
+
+        String sql="Insert Into music_concert Values(?,?,?,?,?)";
+
+
+        try{
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            int duration = Integer.parseInt(sc.nextLine());
+            if(duration<60)
+            duration=60;
+            ps.setInt(5,duration);
+
+            ps.executeUpdate();
+
+            System.out.println("Music concert added successfully!");
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void processMenu(Connection con,Scanner sc){
+
+
+        int option=Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertConcert(con, sc);
+            displayAllConcerts(con);
+        }
+        else if(option==2){
+            displayAllConcerts(con);
+        }
+        else{
+            System.out.println("Invalid Choice. ");
+        }
+
+
+    }
+    public static void main(String[] args) {
+
+        processMenu(getConnection(),new Scanner(System.in));
+
+    }
+}
+----------------------------------------------------------------------------------------------
+
+
+Program 1 session 2 
+
+
+package com.examly;
+
+import java.util.*;
+import java.sql.*;
+
+
+public class OnlinePhotographyWorkshopManagement {
+
+
+    public static Connection getConnection(){
+
+        Connection con=null;
+        try{
+
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+            con=DriverManager.getConnection(url,username,password);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        return con;
+    }
+
+    public static void displayAllWorkshops(Connection con){
+        try{
+            String sql="Select * from photography_workshop Order by location desc";
+
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while (rs.next()) {
+                
+                System.out.println("WorkshopID: "+rs.getInt(1)+", Location: "+rs.getString(2)+", Date: "+rs.getString(3)+", Photographer: "+rs.getString(4)+", Duration: "+rs.getInt(5)+" mins");
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertWorkshop(Connection con,Scanner sc){
+        String sql="Insert Into photography_workshop Values (?,?,?,?,?)";
+
+        try{
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+            ps.executeUpdate();
+            System.out.println("Photography workshop added successfully!");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public static void deleteWorkshop(Connection con,Scanner sc){
+
+        try{
+            String location=sc.nextLine();
+            String photographer=sc.nextLine();
+            String sql="Delete from photography_workshop where location = ? and photographer=? ";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setString(1,location);
+            ps.setString(2,photographer);
+
+            int n=ps.executeUpdate();
+            if(n!=0){
+                System.out.println("Photography workshop deleted successfully!");
+            }
+            else{
+                System.out.println("Error");
+            }
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+    public static void processMenu(Connection con,Scanner sc){
+
+        int option=Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertWorkshop(con, sc);
+            displayAllWorkshops(con);
+            
+        }
+        else if(option ==2){
+            deleteWorkshop(con, sc);
+            displayAllWorkshops(con);
+        }
+        else if(option ==3){
+            displayAllWorkshops(con);  
+        }
+        else{
+            System.out.println("Invalid Choice.");
+        }
+
+
+        
+
+    }
+
+    public static void main(String[] args) {
+
+        processMenu(getConnection(), new Scanner(System.in));
+       
+    }
+}
+----------------------------------------------------------------------------------------------
+Program 2 session 2
+
+package com.examly;
+import java.util.*;
+import java.sql.*;
+
+
+public class DigitalArtGalleryManagement {
+
+
+    public static Connection getConnection(){
+        Connection con=null;
+
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+            
+            
+            con=DriverManager.getConnection(url,username,password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return con;
+
+    }
+
+
+    public static void displayAllExhibits(Connection con){
+
+        try{
+            String sql="Select * from art_gallery_exhibit Order by artwork_title desc";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ExhibitID: "+rs.getInt(1)+", Artwork: "+rs.getString(2)+", Artist: "+rs.getString(3)+", Date: "+rs.getString(4)+", Duration: "+rs.getInt(5)+" days");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void insertExhibit(Connection con,Scanner sc){
+
+        String sql="Insert into art_gallery_exhibit values(?,?,?,?,?)";
+
+        try{
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+
+            ps.executeUpdate();
+
+            System.out.println("Art exhibit added successfully!");
+
+        }
+
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    public static void updateExhibitDuration(Connection con,Scanner sc){
+        try {
+            String sql="update art_gallery_exhibit set duration_days=duration_days+15 where exhibit_id=? and artwork_title=?";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.executeUpdate();
+            System.out.println("Exhibit duration updated successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        }
+
+        
+
+    }
+
+
+    public static void processMenu(Connection con,Scanner sc){
+        int option=Integer.parseInt(sc.nextLine());
+
+        if(option == 1){
+            insertExhibit(con, sc);
+            displayAllExhibits(con);
+        }
+        if(option == 2){
+            updateExhibitDuration(con, sc);
+            displayAllExhibits(con);
+        }
+        if(option ==3){
+            displayAllExhibits(con);
+        }
+        else{
+            System.out.println("Invalid Choice. ");
+        }
+
+    }
+    public static void main(String[] args) {
+        processMenu(getConnection(), new Scanner(System.in));
+        
+    }
+}
+
+------------------------------------------------------------------------------------------------------
+
+
+package com.examly;
+
+import java.sql.DriverManager;
+import java.util.*;
+import java.sql.*;
+
+public class OnlineArtWorkshopManagement {
+
+
+
+    public static Connection getConnection(){
+        Connection con=null;
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+            con=DriverManager.getConnection(url,username,password);
+
+
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+
+    public static void displayAllWorkshops(Connection con){
+
+        try{
+            String sql="Select * from art_workshop Order by artwork_name desc";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+                System.out.println("WorkshopID: "+rs.getInt(1)+", Artwork: "+rs.getString(2)+", Date: "+rs.getString(3)+", Artist: "+rs.getString(4)+", Duration: "+rs.getInt(5)+" mins");
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public static void insertWorkshop(Connection con,Scanner sc){
+        String sql="Insert into art_workshop values (?,?,?,?,?)";
+
+        try {
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+
+            int duration=Integer.parseInt(sc.nextLine());
+            if(duration<60)
+                duration=60;
+            ps.setInt(5,duration);
+
+
+            ps.executeUpdate();
+
+            System.out.println("Art workshop added successfully!");
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void updateWorkshopDuration(Connection con,Scanner sc){
+
+        try {
+            String sql="Update art_workshop set duration_mins=duration_mins+45 where artwork_name=? or artist=?";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setString(1,sc.nextLine());
+            ps.setString(2,sc.nextLine());
+
+            ps.executeUpdate();
+
+
+            System.out.println("Workshop duration updated successfully!");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+           
+        }
+    }
+
+
+    public static void processMenu(Connection con,Scanner sc){
+
+        int option=Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertWorkshop(con,sc);
+            displayAllWorkshops(con);
+        }
+        if(option==2){
+            updateWorkshopDuration(con, sc);
+            displayAllWorkshops(con);
+
+        }
+        if(option==3){
+            displayAllWorkshops(con);
+        }
+        else{
+        System.out.println("Invalid Choice.");
+        }
+
+    }
+    public static void main(String[] args) {
+
+        processMenu(getConnection(),new Scanner(System.in));
+      
+    }
+}
+
+
+----------------------------------------------------------------
+package com.examly;
+
+import java.util.*;
+import java.sql.*;
+
+public class OnlineCookingWorkshopManagement {
+
+
+    public static Connection getConnection(){
+
+
+        Connection con=null;
+        try {
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+
+            con=DriverManager.getConnection(url,username,password);
+
+        } catch (Exception e) {
+            e.printStackTrace();  
+        }
+        return con;
+
+    }
+
+    public static void displayAllWorkshops(Connection con){
+
+        try {
+            String sql="Select * from cooking_workshop Order by dish_name desc";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                System.out.println("WorkshopID: "+rs.getInt(1)+", Dish: "+rs.getString(2)+", Date: "+rs.getString(3)+", Chef: "+rs.getString(4)+", Duration: "+rs.getInt(5));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void insertWorkshop(Connection con,Scanner sc){
+
+        String sql="Insert into cooking_workshop values(?,?,?,?,?)";
+        try {
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+
+            ps.executeUpdate();
+
+            System.out.println("Cooking workshop added successfully!");
+
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void deleteWorkshop(Connection con,Scanner sc){
+
+        try {
+
+            String dish_name=sc.nextLine();
+            String chef=sc.nextLine();
+
+            String sql="Delete from cooking_workshop where dish_name=? and chef=?";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ps.setString(1,dish_name);
+            ps.setString(2,chef);
+            int n=ps.executeUpdate();
+            if(n!=0){
+                System.out.println("Cooking workshop deleted successfully!");
+            }
+
+            else{
+                System.out.println("Error");
+            }
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+           
+        }
+
+    }
+
+
+    public static void processMenu(Connection con,Scanner sc){
+
+
+        int option =Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertWorkshop(con,sc);
+            displayAllWorkshops(con);
+        }
+
+        else if(option ==2){
+            deleteWorkshop(con, sc);
+            displayAllWorkshops(con);
+
+        }
+        else if(option==3){
+            displayAllWorkshops(con);
+        }
+        else{
+            System.out.println("Invalid Choice.");
+        }
+
+    }
+    public static void main(String[] args) {
+        
+        processMenu(getConnection(),new Scanner(System.in));
+
+    }
+}
+
+-----------------------------------------------------------------
+
+
+Query 1
+
+Select city,length(city) as length
+from station
+where
+length(city)=(select max(length(city)) from station);
+
+
+-----------------------------------------------------------------------
+
+Query 2
+
+# You are using MYSQL
+select s.buyer_id from
+sales s
+join
+product p
+on
+s.product_id=p.product_id
+where
+p.product_name='S8';
+
+
+
+------------------------------------------------------------------------
+
+Query 3
+
+Select p.product_name,s.year,s.price
+from 
+product p
+join
+sales s
+where s.product_id=p.product_id;
+
+-------------------------------------------------------------------------
+
+
+Query 4
+
+
+select name 
+from employee
+order by name;
+
+-------------------------------------------------------------------------------
+
+Query 5
+
+
+select sell_date as date,count(*) as no_of_products
+from orders
+group by sell_date;
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+day 11 Program 1
+
+package com.examly;
+import java.util.*;
+import java.sql.*;
+
+public class OnlineFitnessClassManagement {
+
+    public static Connection getConnection(){
+        Connection con=null;
+
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+            con=DriverManager.getConnection(url,username,password);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+
+    public static void displayAllClasses(Connection con){
+        try {
+            String sql="Select * From fitness_class Order by class_type desc";
+
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ClassID: "+rs.getInt(1)+", Type: "+rs.getString(2)+", Date: "+rs.getString(3)+", Instructor: "+rs.getString(4)+", Duration: "+rs.getInt(5)+" mins");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void insertClass(Connection con,Scanner sc){
+        String sql="Insert into fitness_class values(?,?,?,?,?)";
+
+        try {
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+
+            ps.executeUpdate();
+
+            System.out.println("Fitness class added successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void updateClassDuration(Connection con,Scanner sc){
+
+        try {
+            
+            String sql="Update fitness_class set duration_mins=duration_mins+30 where class_id=? and class_type=?"; 
+            
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+
+            ps.executeUpdate();
+
+            System.out.println("Class duration updated successfully!");
+
+
+           
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void deleteClass(Connection con,Scanner sc){
+
+        try {
+            int class_id=Integer.parseInt(sc.nextLine());
+            String sql="Delete from fitness_class where class_id=?";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1,class_id);
+            int n=ps.executeUpdate();
+
+            if(n!=0){
+                System.out.println("Fitness class deleted successfully!");
+
+            }
+            else{
+                System.out.println("Error");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void processMenu(Connection con,Scanner sc){
+
+        int option =Integer.parseInt(sc.nextLine());
+        if(option==1){
+            insertClass(con, sc);
+            displayAllClasses(con);
+        }
+        else if(option==2){
+            updateClassDuration(con, sc);
+            displayAllClasses(con);
+        }
+        else if(option==3){
+            deleteClass(con, sc);
+            displayAllClasses(con);
+        }
+        else if(option==4){
+            displayAllClasses(con);
+        }
+        else{
+            System.out.println("Invalid Choice. ");
+        }
+
+    }
+    public static void main(String[] args) {
+
+        processMenu(getConnection(),new Scanner(System.in));
+      
+    }
+}
+--------------------------------------------------------------------------------------------------------
+package com.examly;
+import java.sql.*;
+import java.util.*;
+
+public class OnlineMovieTicketBooking {
+
+    public static Connection getConnection(){
+
+        Connection con=null;
+
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+
+            con=DriverManager.getConnection(url,username,password);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+
+    }
+
+    public static void displayAllShows(Connection con){
+
+        try {
+            String sql="Select * from movie_show order by available_seats desc";
+            PreparedStatement ps=con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+                System.out.println("ShowID: "+rs.getInt(1)+", Movie: "+rs.getString(2)+", Date: "+rs.getString(3)+", Theater: "+rs.getString(4)+", Available Seats: "+rs.getInt(5));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void insertShow(Connection con,Scanner sc){
+        String sql="Insert into movie_show values (?,?,?,?,?)";
+
+        try {
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+
+            ps.executeUpdate();
+            System.out.println("Movie show added successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+
+    }
+
+    public static void updateSeats(Connection con,Scanner sc){
+
+        try {
+            
+            String sql="Update movie_show set available_seats = available_seats+20 where show_id=? and movie_title=?";
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+
+            int n = ps.executeUpdate();
+
+            if(n!=0){
+
+                System.out.println("Seats updated successfully!");
+            }else{
+                System.out.println("update failed ");
+            }
+            
+
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void deleteShow(Connection con,Scanner sc){
+
+        try {
+            String sql="Delete from movie_show where show_id=? and movie_title=?";
+            PreparedStatement ps=con.prepareStatement(sql);
+            String show_id=sc.nextLine();
+            String movie_title=sc.nextLine();
+
+            ps.setString(1,show_id);
+            ps.setString(2,movie_title);
+
+            int n=ps.executeUpdate();
+            if(n!=0){
+                System.out.println("Movie show deleted successfully!");
+            }
+            else{
+                System.out.println("Error");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void processMenu(Connection con,Scanner sc){
+        int opt=Integer.parseInt(sc.nextLine());
+        if(opt==1){
+            insertShow(con, sc);
+            displayAllShows(con);
+        }
+        if(opt==2){
+            updateSeats(con, sc);
+            displayAllShows(con);
+        }
+        if(opt==3){
+            deleteShow(con, sc);
+            displayAllShows(con);
+        }
+        if(opt==4){
+            displayAllShows(con);
+        }
+        else{
+            System.out.println("Invalid Choice.");
+        }
+
+    }
+    public static void main(String[] args) {
+        processMenu(getConnection(),new Scanner(System.in));
+     
+    }
+}
+

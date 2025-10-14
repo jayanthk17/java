@@ -1,0 +1,359 @@
+JAVA JDBC DAY 11
+------------------------------------
+DAY 11 SESSION 1 CODE 1
+-------------------------
+CREATE TABLE books(  
+    bookid int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+    title VARCHAR(100),
+    author VARCHAR(100),
+    publicationdate DATE,
+    genre VARCHAR(100),
+    availablecopies INT
+) COMMENT '';
+..............................................................................class Book......................
+package com.examly.entity;
+
+import java.time.LocalDate;
+
+public class Book {
+    private int bookId;
+    private String title;
+    private String author;
+    private LocalDate publicationDate;
+    private String genre;
+    private int copiesAvailable;
+    
+    public Book(String author, String title, LocalDate publicationDate, String genre, int copiesAvailable) {
+        this.author = author;
+        this.title = title;
+        this.publicationDate = publicationDate;
+        this.genre = genre;
+        this.copiesAvailable = copiesAvailable;
+    }
+    
+    public Book(int bookId, String author, String title,LocalDate publicationDate, String genre, int copiesAvailable) {
+        this.bookId = bookId;
+        this.author = author;
+        this.title = title;
+        this.publicationDate = publicationDate;
+        this.genre = genre;
+        this.copiesAvailable = copiesAvailable;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+    public String getGenre() {
+        return genre;
+    }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+    public int getCopiesAvailable() {
+        return copiesAvailable;
+    }
+    public void setCopiesAvailable(int copiesAvailable) {
+        this.copiesAvailable = copiesAvailable;
+    }
+    
+    
+}
+.............................................................................Interface BookService in service package/folder........
+package com.examly.service;
+
+import java.util.List;
+
+import com.examly.entity.Book;
+
+public interface BookService {
+    Book addBook(Book book);
+    List<Book> getAllBooks();
+    List<Book> searchByTitle(String title);
+    
+}
+................................................................class BookServiceImpl  in service folder..........
+package com.examly.service;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.examly.entity.Book;
+import com.examly.util.DBConnectionUtil;
+
+public class BookServiceImpl implements BookService{
+
+    @Override
+    public Book addBook(Book book) {
+        try {
+            String sql="INSERT INTO books(title,author,publicationDate,genre,copiesAvailable) VALUES(?,?,?,?,?)";
+            Connection con = DBConnectionUtil.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ps.setString(1,book.getTitle());
+            ps.setString(2,book.getAuthor());
+            ps.setDate(3,Date.valueOf(book.getPublicationDate()));  //--Date.valueOf() converts local date to sql date
+            ps.setString(4,book.getGenre());
+            ps.setInt(5,book.getCopiesAvailable());
+            ps.executeUpdate();
+            System.out.println("Book added successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return book;
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            String sql="SELECT * FROM books";
+            Connection con = DBConnectionUtil.getConnection();
+            PreparedStatement ps= con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Book b = new Book(rs.getInt(1), 
+                                    rs.getString(2),
+                                    rs.getString(3), rs.getDate(4).toLocalDate(),
+                                    rs.getString(5), rs.getInt(6) );
+                books.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> searchByTitle(String title) {
+        ArrayList<Book> books = new ArrayList<>();
+        try {
+            String sql="SELECT * FROM books WHERE title LIKE ?";
+            Connection con = DBConnectionUtil.getConnection();
+            PreparedStatement ps= con.prepareStatement(sql);
+            ps.setString(1, "%"+title+"%");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Book b = new Book(rs.getInt(1), 
+                                    rs.getString(2),
+                                    rs.getString(3), rs.getDate(4).toLocalDate(),
+                                    rs.getString(5), rs.getInt(6) );
+                books.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+}
+.......................................................................MainModule in util folder.................
+package com.examly;
+
+import java.time.LocalDate;
+import java.util.Scanner;
+
+import com.examly.entity.Book;
+import com.examly.service.BookService;
+import com.examly.service.BookServiceImpl;
+
+public class MainModule {
+    public static void addBook(BookService bService, Scanner sc){
+        String title=sc.nextLine();
+        String author=sc.nextLine();
+        LocalDate date=LocalDate.parse(sc.nextLine());
+        String genre = sc.nextLine();
+        int copies =Integer.parseInt(sc.nextLine());
+        Book b= new Book(author,title,date,genre,copies);
+        bService.addBook(b);
+        System.out.println("Book added successfully.");
+    }
+    public static void viewAllBooks(BookService bService){
+        for(Book b:bService.getAllBooks()){
+            System.out.println("Title: "+b.getTitle());
+            System.out.println("Author: "+b.getAuthor());
+        }
+    }
+    public static void searchBookByTitle(BookService bs, Scanner sc){
+        for(Book b: bs.searchByTitle(sc.nextLine())){
+            System.out.println("Title: "+b.getTitle());
+            System.out.println("Author: "+b.getAuthor());
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        BookService bs= new BookServiceImpl();
+        while(true){
+            int opt = Integer.parseInt(sc.nextLine());
+            if(opt==1){
+                addBook(bs, sc);
+            }
+            else if(opt==2){
+                viewAllBooks(bs);
+            }
+            else if(opt==3){
+                searchBookByTitle(bs, sc);
+            }
+            else{
+                System.out.println("existing");
+                break;
+            }
+        }
+    }
+}
+..............................................DBConnectionUtil in util folder........................
+package com.examly.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DBConnectionUtil {
+    public static Connection getConnection(){
+        Connection con=null;
+        try{
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password="examly";
+            con=DriverManager.getConnection(url,username,password);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 11 SESSION 1 CODE 2
+;;;;;;;;;;;;;;;;;;;;;;;
+package com.examly;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+public class OnlineFitnessClassManagement {
+    public static Connection getConnection(){
+        Connection con=null;
+        try {
+            String url="jdbc:mysql://localhost/appdb";
+            String username="root";
+            String password ="examly";
+            con=DriverManager.getConnection(url,username,password);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return con;
+    }
+    public static void displayAllClasses(Connection con){
+        String sql="SELECT * FROM fitness_class ORDER BY class_type DESC";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs= ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ClassID: "+rs.getInt(1)+", Type: "+rs.getString(2)+", Date: "+rs.getString(3)+", Instructor: "+rs.getString(4)+", Duration: "+rs.getInt(5)+" mins");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void insertClass(Connection con,Scanner sc){
+        String sql="INSERT INTO fitness_class VALUES(?,?,?,?,?)";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(sc.nextLine()));
+            ps.setString(2,sc.nextLine());
+            ps.setString(3,sc.nextLine());
+            ps.setString(4,sc.nextLine());
+            ps.setInt(5,Integer.parseInt(sc.nextLine()));
+            ps.executeUpdate();
+            System.out.println("Fitness class added successfully!");
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+    } 
+    public static void updateClassDuration(Connection con,Scanner sc){
+        try {
+            String sql="UPDATE fitness_class SET duration_mins=duration_mins+30 WHERE class_id=? and class_type=?";
+            PreparedStatement ps= con.prepareStatement(sql);
+            int classId=Integer.parseInt(sc.nextLine());
+            String classType = sc.nextLine();
+            ps.setInt(1,classId);
+            ps.setString(2,classType);
+            ps.executeUpdate();
+            System.out.println("Class duration updated successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteClass(Connection con,Scanner sc){
+        String sql="DELETE FROM fitness_class WHERE class_id=?";
+        try {
+            PreparedStatement ps= con.prepareStatement(sql);
+            int classId=Integer.parseInt(sc.nextLine());
+            ps.setInt(1,classId);
+            ps.executeUpdate();
+            System.out.println("Fitness class deleted successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void processMenu(Connection con,Scanner sc){
+        int option=Integer.parseInt(sc.nextLine());
+        switch (option) {
+            case 1:
+                insertClass(con, sc);
+                displayAllClasses(con);
+                break;
+            case 2:
+                updateClassDuration(con, sc);
+                displayAllClasses(con);
+                break;
+            case 3:
+                deleteClass(con, sc);
+                displayAllClasses(con);
+                break;
+            case 4:
+                displayAllClasses(con);
+                break;
+        
+            default:
+                System.out.println("Invalid Choice!");
+                break;
+        }
+    }
+    public static void main(String[] args) {
+      Connection con = getConnection();
+      Scanner sc=new Scanner(System.in);
+      processMenu(con, sc);
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+DAY 11 SESSION 1 CODE 3
+;;;;;;;;;;;;;;;;;;;;;;;;;
+

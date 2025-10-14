@@ -1,0 +1,309 @@
+Book.java
+
+package com.examly.entity;
+
+import java.time.LocalDate;
+
+public class Book {
+
+    
+    private int bookId;
+        private String title;
+        private String author;
+        private LocalDate publicationDate;
+        private String genre;
+        private int copiesAvailable;
+
+        public Book(String author,String title, LocalDate publicationDate, String genre, int copiesAvailable) {
+            this.author = author;
+            this.title = title;
+            this.publicationDate = publicationDate;
+            this.genre = genre;
+            this.copiesAvailable = copiesAvailable;
+        }
+        
+
+
+        
+        public Book(int bookId, String title, String author, LocalDate publicationDate, String genre,
+                int copiesAvailable) {
+            this.bookId = bookId;
+            this.title = title;
+            this.author = author;
+            this.publicationDate = publicationDate;
+            this.genre = genre;
+            this.copiesAvailable = copiesAvailable;
+        }
+
+
+
+
+        public int getBookId() {
+            return bookId;
+        }
+       
+        public void setBookId(int bookId) {
+            this.bookId = bookId;
+        }
+        public String getTitle() {
+            return title;
+        }
+        public void setTitle(String title) {
+            this.title = title;
+        }
+        public String getAuthor() {
+            return author;
+        }
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+        public LocalDate getPublicationDate() {
+            return publicationDate;
+        }
+        public void setPublicationDate(LocalDate publicationDate) {
+            this.publicationDate = publicationDate;
+        }
+        public String getGenre() {
+            return genre;
+        }
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+        public int getCopiesAvailable() {
+            return copiesAvailable;
+        }
+        public void setCopiesAvailable(int copiesAvailable) {
+            this.copiesAvailable = copiesAvailable;
+        }
+}
+
+
+
+
+-----------------------------------------------------------------------------------
+BookService.java
+
+package com.examly.service;
+import java.util.List;
+
+import com.examly.entity.Book;
+
+public interface BookService {
+
+    Book addBook(Book book);
+    List<Book> getAllBooks();
+    List<Book> searchByTitle(String title);
+
+
+
+}
+
+
+--------------------------------------------------------------------------
+BookServiceImpl.java
+
+package com.examly.service;
+
+import java.util.List;
+import java.util.*;
+import java.sql.*;
+import java.sql.Date;
+
+import com.examly.entity.Book;
+import com.examly.util.DBConnectionUtil;
+
+public class BookServiceImpl implements BookService {
+
+    @Override
+    public Book addBook(Book book) {
+
+        
+        try {
+            String sql="Insert into books values(?,?,?,?,?,?)";
+            Connection con=DBConnectionUtil.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+           
+            ps.setInt(1,book.getBookId());
+            ps.setString(2,book.getTitle());
+            ps.setString(3,book.getAuthor());
+            ps.setDate(4,Date.valueOf(book.getPublicationDate()));
+            ps.setString(5,book.getGenre());
+            ps.setInt(6,book.getCopiesAvailable());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return book;
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        
+        ArrayList<Book> books=new ArrayList<>();
+        try {
+            String sql="Select * From books";
+            Connection con=DBConnectionUtil.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                Book b=new Book(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDate(4).toLocalDate(),rs.getString(5),rs.getInt(6));
+                books.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> searchByTitle(String title) {
+        ArrayList<Book> books=new ArrayList<>();
+        try {
+            String sql="Select * From books where title like ?";
+            Connection con=DBConnectionUtil.getConnection();
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setString(1,"%"+title+"%");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                Book b=new Book(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDate(4).toLocalDate(),rs.getString(5),rs.getInt(6));
+                books.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+}
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+DBConnectionUtil.java
+
+package com.examly.util;
+
+import java.util.*;
+import java.sql.*;
+
+public class DBConnectionUtil {
+
+    public static Connection getConnection(){
+
+    Connection con=null;
+    try{
+        String url="jdbc:mysql://localhost/appdb";
+        String username="root";
+        String password="examly";
+
+        con=DriverManager.getConnection(url,username,password);
+    }
+    catch(Exception e){
+        e.printStackTrace();
+    }
+    
+
+    return con;
+}
+
+
+}
+-----------------------------------------------------------------------------------------------------
+MainModule.java
+package com.examly;
+import java.util.*;
+import java.sql.*;
+
+import java.time.LocalDate;
+
+import com.examly.entity.Book;
+import com.examly.service.BookService;
+import com.examly.service.BookServiceImpl;
+public class MainModule {
+
+    public static void addBook(BookService bService, Scanner sc){
+        String title=sc.nextLine();
+        String author=sc.nextLine();
+        LocalDate date=LocalDate.parse(sc.nextLine());
+        String genre=sc.nextLine();
+        int copies=Integer.parseInt(sc.nextLine());
+        Book b=new Book(author,title,date,genre,copies);
+        bService.addBook(b);
+        System.out.println("Book added successfully.");
+        
+    }
+
+
+    public static void viewAllBooks(BookService bService){
+        
+        for(Book b: bService.getAllBooks()){
+            System.out.println("Title: "+b.getTitle());
+            System.out.println("Author: "+b.getAuthor());
+        }
+    }
+
+
+    public static void searchBookByTitle(BookService bs,Scanner sc){
+        for(Book b: bs.searchByTitle(sc.nextLine())){
+            System.out.println("Title: "+b.getTitle());
+            System.out.println("Author: "+b.getAuthor());
+        }
+
+    }
+    public static void main(String[] args) {
+
+        Scanner sc=new Scanner(System.in);
+        BookService bs=new BookServiceImpl();
+        while(true){
+            int opt=Integer.parseInt(sc.nextLine());
+            if(opt==1){
+                addBook(bs,sc);
+
+            }
+            else if(opt==2){
+                viewAllBooks(bs);
+            }
+            else if(opt==3){
+                searchBookByTitle(bs,sc);
+            }
+            else{
+                System.out.println("Exiting...");
+                return;
+
+            }
+        }
+
+        
+        
+    }
+}
+-------------------------------------------------------------------------------------
+html program
+
+
+<html>
+    <body>
+        <h2>Register</h2>
+        <form>
+            <label for="username">Username:</label><br />
+            <input type=""text" id="username" name="username"/><br /><br />
+
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" name="email" /><br /><br />
+
+            <label for="password">Password:</label><br />
+            <input type="password" id="password" name="password" /><br /><br />
+
+            
+            <label for="confirmpassword">Confirm Password:</label><br />
+            <input type="confirmpassword" id="confirmPassword" name="confirmPassword" /><br /><br />
+
+            <button type="submit" id="registerButton">Register</button>
+
+        </form>
+    
+        </body>
+</html>
+
+
