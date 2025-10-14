@@ -224,120 +224,126 @@ public class OnlinePhotographyWorkshopManagement {
 
 package com.examly;
 import java.util.*;
-import java.util.Date;
 import java.sql.*;
 
 public class DigitalArtGalleryManagement {
-
-    public static Connection getConnection() {
+    public static Connection getConnection(){
         Connection con = null;
         try {
             String url = "jdbc:mysql://localhost/appdb";
             String username = "root";
             String password = "examly";
             con = DriverManager.getConnection(url, username, password);
+            
         } catch (Exception e) {
-            System.out.println("Database connection failed.");
-            e.printStackTrace();
+        e.printStackTrace();
         }
         return con;
+
     }
 
-    public static void insertExhibit(Connection con, Scanner sc) {
-        String sql = "INSERT INTO art_gallery_exhibit VALUES (?, ?, ?, ?, ?)";
+    public static void displayAllExhibits(Connection con){
+        String sql = "select * from art_gallery_exhibit order by artwork_title desc";
         try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                System.out.println("ExhibitID: "+rs.getInt(1)+
+                ", Artwork: "+rs.getString(2)+
+                ", Artist: "+rs.getString(3)+
+                ", Date: "+rs.getString(4)+
+                ", Duration: "+rs.getInt(5) + " days");
+            }
+            
+        } catch (SQLException e) {
+           e.printStackTrace();
+        }
+
+    }
+
+    public static void insertExhibit(Connection con,Scanner sc){
+        String sql = "Insert into art_gallery_exhibit values(?,?,?,?,?)";
+        try{
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(sc.nextLine()));
             ps.setString(2, sc.nextLine());
             ps.setString(3, sc.nextLine());
-            ps.setDate(4,java.sql.Date.valueOf(sc.nextLine().trim()));
+            ps.setString(4, sc.nextLine());
             ps.setInt(5, Integer.parseInt(sc.nextLine()));
-
-    ps.executeUpdate();
-    System.out.println("Insert Success");
+            ps.executeUpdate();
+            System.out.println("Insert Success");
             System.out.println("Art exhibit added successfully!");
-        } catch (Exception e) {
-            System.out.println("Error inserting exhibit.");
+            displayAllExhibits(con);
+
+        }
+        catch(SQLException e){
             e.printStackTrace();
         }
-    }
 
-    public static void updateExhibitDuration(Connection con, Scanner sc) {
-        String sql = "UPDATE art_gallery_exhibit SET duration_days = duration_days + 15 WHERE exhibit_id = ? AND artwork_title = ?";
-        try {
+    }
+    public static void updateExhibitDuration(Connection con,Scanner sc){
+        String sql = "update art_gallery_exhibit set duration_days = duration_days+15 where exhibit_id = ? and artwork_title = ?";
+        try{
             PreparedStatement ps = con.prepareStatement(sql);
             int id = Integer.parseInt(sc.nextLine());
             String title = sc.nextLine();
-            ps.setInt(1, id);
-            ps.setString(2, title);
+            ps.setInt(1,id);
+            ps.setString(2,title);
 
-    int rows = ps.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Update Success");
+            int rows = ps.executeUpdate();
+            if(rows>0){
                 System.out.println("Exhibit duration updated successfully!");
-            } else {
-                System.out.println("No matching exhibit found.");
+
             }
-            displayAllExhibits(con);
-        } catch (SQLException e) {
-            System.out.println("Error updating exhibit.");
+
+        }
+        catch(SQLException e){
             e.printStackTrace();
         }
+
+        
     }
 
-    public static void displayAllExhibits(Connection con) {
-        String sql = "SELECT * FROM art_gallery_exhibit ORDER BY artwork_title DESC";
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-    
-        while (rs.next()) {
-                System.out.println("ExhibitID: " + rs.getInt("exhibit_id")
-                    + ", Artwork: " + rs.getString("artwork_title")
-                    + ", Artist: " + rs.getString("artist_name")
-                    + ", Date: " + rs.getDate("exhibit_date")
-                    + ", Duration: " + rs.getInt("duration_days") + " days");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error displaying exhibits.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void processMenu(Connection con, Scanner sc) {
+    public static void processMenu(Connection con,Scanner sc){
         int choice = Integer.parseInt(sc.nextLine());
-
-    switch (choice) {
+        switch (choice) {
             case 1:
                 insertExhibit(con, sc);
                 break;
-            case 2:
+                case 2:
                 updateExhibitDuration(con, sc);
                 break;
-            case 3:
+
+                case 3:
                 displayAllExhibits(con);
                 break;
+                
+        
             default:
-                System.out.println("Invalid Choice");
+            System.out.println("Invalid Choice");
+                break;
         }
     }
+
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Connection con = getConnection();
-
-    if (con != null) {
+        if(con!=null){
             processMenu(con, sc);
-            try {
-                con.close();
-            } catch (SQLException e) {
-                System.out.println("Error closing connection.");
-                e.printStackTrace();
-            }
         }
+        try{
+            con.close();
+        }
+        catch(Exception e){
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+
+
+        
     }
 }
-
 ------------------------------------------------------------------------------------------------
 SESSION 3 PROGRAM 2
 
@@ -429,7 +435,7 @@ public class OnlineArtWorkshopManagement {
             String artist = sc.nextLine().trim();
 
     String sql = "UPDATE art_workshop " +
-                         "SET duration_mins = duration_mins + 45 " +
+                         "SET duration_mins = duration_mins + 15 " +
                          "WHERE artwork_name = ? OR artist = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, artwork);

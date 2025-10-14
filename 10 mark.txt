@@ -1,0 +1,116 @@
+String str = "Hello, World!";
+StringBuilder sb = new StringBuilder(str);
+
+sb.append(" Welcome!");
+
+String newStr = sb.toString();
+
+------------------------------------------
+
+
+import java.util.*;
+
+public class ArrayListReverseExample {
+    public static void main(String[] args) {
+        // Step 1: Create an array
+        String[] array = {"apple", "banana", "orange"};
+
+        // Step 2: Convert array to ArrayList
+        List<String> arrayList = new ArrayList<>(Arrays.asList(array));
+
+        // Step 3: Reverse the ArrayList
+        Collections.reverse(arrayList);
+
+        // Step 4: Convert ArrayList back to array
+        String[] reversedArray = arrayList.toArray(new String[0]);
+
+        // Print the reversed array
+        System.out.println(Arrays.toString(reversedArray));  // Output: [orange, banana, apple]
+    }
+}
+
+
+-------------------------------------------------------------------------
+class SumDigitsInString {
+  
+    public static void main(String[] args) {
+          Scanner sc = new Scanner(System.in);
+       String s = sc.nextLine();
+       
+       int sum =0;
+       for(char c: s.toCharArray()){
+           if(Character.isDigit(c)){
+               sum += c -'0';
+           }
+       }
+       System.out.println(sum);
+    }
+}
+-------------------------------------------
+
+import java.util.Scanner;
+
+public class ArmstrongUserInput {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Take user input
+        System.out.print("Enter a number: ");
+        int num = scanner.nextInt();
+
+        int original = num;
+        int digits = 0;
+
+        // Step 1: Count number of digits
+        int temp = num;
+        while (temp > 0) {
+            digits++;
+            temp /= 10;
+        }
+
+        // Step 2: Calculate Armstrong sum manually
+        temp = num;
+        int result = 0;
+        while (temp > 0) {
+            int digit = temp % 10;
+
+            // Manual power calculation (digit^digits)
+            int power = 1;
+            for (int i = 0; i < digits; i++) {
+                power *= digit;
+            }
+
+            result += power;
+            temp /= 10;
+        }
+
+        // Step 3: Check Armstrong condition
+        if (result == original) {
+            System.out.println(original + " is an Armstrong number.");
+        } else {
+            System.out.println(original + " is not an Armstrong number.");
+        }
+
+        scanner.close();
+    }
+}
+
+-----------------------------------------------------
+remove duplication elements maintain insertion , duplicate remove
+
+
+
+count freq
+String = "hello world"
+
+hashmap create
+
+day 8 session ....3 program 
+charater freq
+
+------------------------------------------------------
+
+
+
+
+

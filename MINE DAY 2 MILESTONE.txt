@@ -1,0 +1,92 @@
+SESSION 3 PROGRAM 2
+
+
+
+package com.examly;
+import java.text.DecimalFormat;
+import java.util.*;
+
+
+class InvalidPriceException extends Exception{
+    public InvalidPriceException(String message){
+        super(message);
+    }
+}
+
+
+public class ProductPriceManager {
+
+    public static void insertProducts(HashMap<String,Double> products,int n) throws InvalidPriceException{
+        Scanner sc = new Scanner(System.in);
+        DecimalFormat df = new DecimalFormat("#.00");
+        for(int i=1;i<=n;i++){
+            System.out.println("Enter product "+i+" name: ");
+            String name = sc.nextLine().trim();
+
+            System.out.println("Enter product "+ i + " price: ");
+            String priceInput = sc.nextLine().trim();
+            double price;
+
+            try {
+
+                price = Double.parseDouble(priceInput);
+                
+            } catch (NumberFormatException e) {
+               throw new InvalidPriceException("Invalid price entered for product: "+name);
+            }
+            if(price <= 0){
+                throw new InvalidPriceException("Invalid price entered for product: "+name);
+
+            }
+            if(products.containsKey(name)){
+                System.out.println("Duplicate product skipped: "+name);
+                continue;
+            }
+
+            products.put(name,Double.valueOf(df.format(price)));
+
+        }
+
+    }
+
+    public static void displayProducts(HashMap<String,Double> products){
+
+        if(products.isEmpty()){
+            System.out.println("No products available.");
+            return;
+        }
+        System.out.println("Products and Prices:");
+        for(Map.Entry<String,Double> entry : products.entrySet()){
+            System.out.println(entry.getKey()+" : ₹"+String.format("%.2f", entry.getValue()));
+        }
+    }
+
+    public static void removeBelowThreshold(HashMap<String,Double> products,
+    double threshold){
+        Iterator<Map.Entry<String,Double>> iterator = products.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry<String,Double> entry = iterator.next();
+            if(entry.getValue()<threshold){
+                System.out.println("Product '"+entry.getKey()+"' removed (price below ₹"+threshold+")");
+                iterator.remove();
+            }
+        }
+    }
+
+    public static void countInRange(HashMap<String,Double> products,double min,double max){
+        int count = 0;
+        for(double price : products.values()){
+            if(price>= min && price <=max){
+                count++;
+            }
+        }
+        System.out.println("Products within price range ₹"+min+" - ₹"+max+": "+count);    
+  
+    }
+
+
+
+    public static void main(String[] args) {
+          
+ }
+}
